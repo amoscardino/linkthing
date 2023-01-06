@@ -1,4 +1,3 @@
-import { isPlatform } from '@ionic/react';
 import { CapacitorHttp } from '@capacitor/core';
 import { getSettings } from "./settingsApi";
 import Bookmark from "./types/bookmark";
@@ -9,9 +8,6 @@ const getBookmarks = async (query?: string): Promise<Bookmark[]> => {
 
     if (settings.instanceUrl === undefined || settings.token === undefined)
         throw new Error('Missing Linkdig settings. Please provide them from the Settings page.');
-
-    if (!isPlatform('ios') && !isPlatform('android'))
-        settings.instanceUrl = 'http://localhost:8010';
 
     const url = new URL('api/bookmarks', settings.instanceUrl);
 

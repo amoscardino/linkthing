@@ -3,6 +3,7 @@ import {
     IonBackButton,
     IonButtons,
     IonContent,
+    IonFooter,
     IonHeader,
     IonPage,
     IonRefresher,
@@ -27,7 +28,10 @@ interface StandardPageProps extends WithChildrenProps {
     /** If defined, an `IonRefresher` component will be added to the `IonContent` fixed slot
      * and this handler will be called from `onIonRefresh`.
       */
-    onPullToRefresh?: () => Promise<void>
+    onPullToRefresh?: () => Promise<void>,
+
+    /** JSX to show inside an `IonFooter` element. Should be either an `IonToolbar` or `undefined`. */
+    footer?: JSX.Element,
 }
 
 const StandardPage = forwardRef<HTMLElement, StandardPageProps>((props, ref) => {
@@ -73,6 +77,12 @@ const StandardPage = forwardRef<HTMLElement, StandardPageProps>((props, ref) => 
 
                 {props.children}
             </IonContent>
+
+            {props.footer && (
+                <IonFooter translucent collapse="fade">
+                    {props.footer}
+                </IonFooter>
+            )}
         </IonPage>
     );
 });

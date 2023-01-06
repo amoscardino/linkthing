@@ -1,5 +1,5 @@
-import { IonList } from "@ionic/react";
-import { useRef } from "react";
+import { IonList, IonSegment, IonSegmentButton, IonTitle, IonToolbar, SegmentChangeEventDetail } from "@ionic/react";
+import { useRef, useState } from "react";
 import BookmarkListItem from "../components/BookmarkListItem";
 import QueryResultDisplay from "../components/QueryResultDisplay";
 import SettingsButton from "../components/SettingsButton";
@@ -9,10 +9,34 @@ import useBookmarks from "../hooks/useBookmarks";
 
 const ListPage = () => {
     const pageRef = useRef<HTMLElement | null>(null);
-    const { bookmarks, isSuccess, isLoading, isError, refresh } = useBookmarks();
+    const [filter, setFilter] = useState<string>('unread');
+    const bookmarksQuery = filter === 'unread' ? '!unread' : undefined;
+    const { bookmarks, isSuccess, isLoading, isError, refresh } = useBookmarks(bookmarksQuery);
 
     const handleRefresh = async (): Promise<void> => {
         await refresh();
+    };
+
+    const handleFilterChange = (evt: CustomEvent<SegmentChangeEventDetail>) => {
+        setFilter(evt.detail.value || 'unread');
+    };
+
+    const ListFooter = () => {
+        if (!isSuccess)
+            return <></>;
+
+        return (
+            <IonToolbar>
+                <IonSegment value={filter} onIonChange={handleFilterChange} style={{ minWidth: '60%' }}>
+                    <IonSegmentButton value="unread">
+                        Unread
+                    </IonSegmentButton>
+                    <IonSegmentButton value="all">
+                        All
+                    </IonSegmentButton>
+                </IonSegment>
+            </IonToolbar>
+        );
     };
 
     return (
@@ -21,6 +45,7 @@ const ListPage = () => {
             ref={pageRef}
             primaryButton={<SettingsButton onChanges={handleRefresh} containingPage={pageRef.current} />}
             onPullToRefresh={handleRefresh}
+            footer={<ListFooter />}
         >
             <QueryResultDisplay
                 isSuccess={isSuccess}
