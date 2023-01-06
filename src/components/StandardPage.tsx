@@ -1,6 +1,5 @@
 import { RefresherEventDetail } from "@ionic/core";
 import {
-    IonBackButton,
     IonButtons,
     IonContent,
     IonFooter,

@@ -1,4 +1,10 @@
-import { IonList, IonSegment, IonSegmentButton, IonTitle, IonToolbar, SegmentChangeEventDetail } from "@ionic/react";
+import {
+    IonList,
+    IonSegment,
+    IonSegmentButton,
+    IonToolbar,
+    SegmentChangeEventDetail
+} from "@ionic/react";
 import { useRef, useState } from "react";
 import BookmarkListItem from "../components/BookmarkListItem";
 import QueryResultDisplay from "../components/QueryResultDisplay";
@@ -21,23 +27,22 @@ const ListPage = () => {
         setFilter(evt.detail.value || 'unread');
     };
 
-    const ListFooter = () => {
-        if (!isSuccess)
-            return <></>;
-
-        return (
-            <IonToolbar>
-                <IonSegment value={filter} onIonChange={handleFilterChange} style={{ minWidth: '60%' }}>
-                    <IonSegmentButton value="unread">
-                        Unread
-                    </IonSegmentButton>
-                    <IonSegmentButton value="all">
-                        All
-                    </IonSegmentButton>
-                </IonSegment>
-            </IonToolbar>
-        );
-    };
+    const listFooter = (
+        <IonToolbar>
+            <IonSegment
+                value={filter}
+                onIonChange={handleFilterChange}
+                style={{ minWidth: '60%' }}
+            >
+                <IonSegmentButton value="unread">
+                    Unread
+                </IonSegmentButton>
+                <IonSegmentButton value="all">
+                    All
+                </IonSegmentButton>
+            </IonSegment>
+        </IonToolbar>
+    );
 
     return (
         <StandardPage
@@ -45,7 +50,7 @@ const ListPage = () => {
             ref={pageRef}
             primaryButton={<SettingsButton onChanges={handleRefresh} containingPage={pageRef.current} />}
             onPullToRefresh={handleRefresh}
-            footer={<ListFooter />}
+            footer={listFooter}
         >
             <QueryResultDisplay
                 isSuccess={isSuccess}
@@ -55,7 +60,7 @@ const ListPage = () => {
                 successRender={() => (
                     <IonList>
                         {(bookmarks || []).map(bookmark => (
-                            <BookmarkListItem key={bookmark.id} bookmark={bookmark} />
+                            <BookmarkListItem key={bookmark.id} bookmark={bookmark} listRefresh={refresh} />
                         ))}
 
                         <Snowman />

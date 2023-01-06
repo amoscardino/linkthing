@@ -1,4 +1,4 @@
-import { InputChangeEventDetail, ToggleChangeEventDetail } from "@ionic/core";
+import { InputChangeEventDetail } from "@ionic/core";
 import {
     IonButton,
     IonIcon,
