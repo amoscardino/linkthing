@@ -1,0 +1,58 @@
+.center {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* Fix for refresher being hidden by the toolbar */
+ion-app.ios ion-refresher.refresher-active {
+    z-index: 1;
+}
+
+ion-app.ios ion-toast::part(container) {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+ion-app.ios ion-card ion-item {
+    --background: var(
+        --ion-card-background,
+        var(--ion-item-background, var(--ion-background-color, #fff))
+    );
+}
+
+ion-app.ios ion-modal ion-list,
+ion-app.ios ion-modal ion-list.list-ios,
+ion-app.ios ion-modal ion-list ion-item,
+ion-app.ios ion-modal ion-list ion-list-header {
+    --background: transparent;
+    background: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+    ion-app.ios ion-popover::part(content) {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0px 6px 16px 0px rgba(255, 255, 255, 0.2);
+    }
+
+    ion-app.ios ion-toast::part(container) {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0px 6px 16px 0px rgba(255, 255, 255, 0.2);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .ios {
+        --ion-background-color: #f2f2f7;
+        --ion-background-color-rgb: 242, 242, 247;
+
+        --ion-card-background: #fff;
+        --ion-item-background: var(--ion-background-color);
+    }
+
+    .ios ion-list {
+        background: var(--ion-background-color, #fff) !important;
+    }
+}

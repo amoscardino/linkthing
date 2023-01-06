@@ -4,17 +4,21 @@
     "private": true,
     "dependencies": {
         "@capacitor/app": "4.1.1",
+        "@capacitor/browser": "^4.1.0",
         "@capacitor/core": "4.6.1",
         "@capacitor/haptics": "4.1.0",
         "@capacitor/keyboard": "4.1.0",
+        "@capacitor/preferences": "^4.0.2",
         "@capacitor/status-bar": "4.1.1",
         "@ionic/react": "^6.0.0",
         "@ionic/react-router": "^6.0.0",
+        "@tanstack/react-query": "^4.20.9",
         "@types/node": "^12.19.15",
         "@types/react": "^18.0.17",
         "@types/react-dom": "^18.0.6",
         "@types/react-router": "^5.1.11",
         "@types/react-router-dom": "^5.1.7",
+        "date-fns": "^2.29.3",
         "history": "^4.9.0",
         "ionicons": "^6.0.3",
         "react": "^18.2.0",
@@ -26,7 +30,8 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build"
+        "build": "react-scripts build",
+        "lcp": "lcp --proxyUrl 'http://linkding.me' --proxyPartial ''"
     },
     "eslintConfig": {
         "extends": [
@@ -46,6 +51,7 @@
         ]
     },
     "devDependencies": {
-        "@capacitor/cli": "4.6.1"
+        "@capacitor/cli": "4.6.1",
+        "local-cors-proxy": "^1.1.0"
     }
 }
