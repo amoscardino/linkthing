@@ -56,20 +56,26 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
                 </IonLabel>
             </IonItem>
 
-            <IonItemOptions side="start">
-                {unread && (
-                    <IonItemOption color="success" onClick={handleToggleReadClick}>
-                        <IonIcon slot="start" icon={checkmark} />
-                        Read
-                    </IonItemOption>
-                )}
+            <IonItemOptions side="start" onIonSwipe={handleToggleReadClick}>
+                <IonItemOption
+                    color="primary"
+                    expandable
+                    onClick={handleToggleReadClick}
+                >
+                    {unread && (
+                        <>
+                            <IonIcon slot="start" icon={checkmark} />
+                            Read
+                        </>
+                    )}
 
-                {!unread && (
-                    <IonItemOption color="primary" onClick={handleToggleReadClick}>
-                        <IonIcon slot="start" icon={bookmarkOutline} />
-                        Unread
-                    </IonItemOption>
-                )}
+                    {!unread && (
+                        <>
+                            <IonIcon slot="start" icon={bookmarkOutline} />
+                            Unread
+                        </>
+                    )}
+                </IonItemOption>
             </IonItemOptions>
 
             {/* <IonItemOptions side="end">
