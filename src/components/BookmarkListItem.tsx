@@ -38,7 +38,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
     return (
         <IonItemSliding ref={slidingRef}>
             <IonItem onClick={handleItemClick} button>
-                {unread && <IonIcon slot="start" icon={bookmarkOutline}></IonIcon>}
+                {unread && <IonIcon slot="start" icon={bookmarkOutline} color="primary"></IonIcon>}
                 {!unread && <IonIcon slot="start"></IonIcon>}
 
                 <IonLabel>
