@@ -7,6 +7,7 @@
         "@capacitor/browser": "^4.1.0",
         "@capacitor/core": "4.6.1",
         "@capacitor/haptics": "4.1.0",
+        "@capacitor/ios": "4.6.1",
         "@capacitor/keyboard": "4.1.0",
         "@capacitor/preferences": "^4.0.2",
         "@capacitor/status-bar": "4.1.1",
@@ -51,6 +52,7 @@
         ]
     },
     "devDependencies": {
+        "@capacitor/assets": "^2.0.4",
         "@capacitor/cli": "4.6.1",
         "local-cors-proxy": "^1.1.0"
     }

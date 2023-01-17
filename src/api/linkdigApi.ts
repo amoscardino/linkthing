@@ -9,7 +9,7 @@ const getBookmarks = async (query?: string): Promise<Bookmark[]> => {
     if (settings.instanceUrl === undefined || settings.token === undefined)
         throw new Error('Missing Linkdig settings. Please provide them from the Settings page.');
 
-    const url = new URL('api/bookmarks', settings.instanceUrl);
+    const url = new URL('api/bookmarks/', settings.instanceUrl);
 
     if (query)
         url.search = new URLSearchParams({ q: query }).toString();

@@ -72,12 +72,12 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
                 )}
             </IonItemOptions>
 
-            <IonItemOptions side="end">
+            {/* <IonItemOptions side="end">
                 <IonItemOption color="medium" disabled>
                     <IonIcon slot="start" icon={pencilOutline} />
                     Edit
                 </IonItemOption>
-            </IonItemOptions>
+            </IonItemOptions> */}
         </IonItemSliding>
     );
 };
