@@ -1,5 +1,5 @@
 import { IonText } from "@ionic/react";
-import { WithChildrenProps } from "../types/props";
+import { WithChildrenProps } from "types/props";
 
 interface ErrorMessageProps extends WithChildrenProps {}
 

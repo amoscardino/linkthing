@@ -37,7 +37,7 @@ const QueryResultDisplay = (props: QueryResultDisplayProps): JSX.Element | null 
     return (
         <IonGrid className="ion-no-padding">
             <IonRow className="ion-justify-content-center">
-                <IonCol size="12" sizeSm="12" sizeMd="10" sizeLg="8" sizeXl="6">
+                <IonCol size="12" sizeSm="10" sizeMd="8" sizeLg="7" sizeXl="6">
                     {props.successRender()}
                 </IonCol>
             </IonRow>

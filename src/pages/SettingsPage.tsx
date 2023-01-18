@@ -10,10 +10,10 @@ import {
     IonNote
 } from "@ionic/react";
 import { checkmarkOutline, closeOutline } from "ionicons/icons";
-import StandardPage from "../components/StandardPage";
-import { tapMedium } from "../utils/haptics";
-import useSettings from "../hooks/useSettings";
-import { Settings } from "../api/types/settings";
+import StandardPage from "components/StandardPage";
+import { tapMedium } from "utils/haptics";
+import useSettings from "hooks/useSettings";
+import { Settings } from "api/types/settings";
 
 interface SettingsPageProps {
     dismiss: (anyChanges: boolean) => void;

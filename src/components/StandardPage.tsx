@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { RefresherEventDetail } from "@ionic/core";
 import {
     IonButtons,
@@ -10,9 +11,8 @@ import {
     IonTitle,
     IonToolbar
 } from "@ionic/react";
-import { forwardRef } from "react";
-import { WithChildrenProps } from "../types/props";
-import { tapLight } from "../utils/haptics";
+import { WithChildrenProps } from "types/props";
+import { tapLight } from "utils/haptics";
 
 interface StandardPageProps extends WithChildrenProps {
     /** Page title. Shows in the header bar. Will use large title styles on iOS. */

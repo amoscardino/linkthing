@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import {
     IonList,
     IonSegment,
@@ -5,13 +6,12 @@ import {
     IonToolbar,
     SegmentChangeEventDetail
 } from "@ionic/react";
-import { useRef, useState } from "react";
-import BookmarkListItem from "../components/BookmarkListItem";
-import QueryResultDisplay from "../components/QueryResultDisplay";
-import SettingsButton from "../components/SettingsButton";
-import Snowman from "../components/Snowman";
-import StandardPage from "../components/StandardPage";
-import useBookmarks from "../hooks/useBookmarks";
+import BookmarkListItem from "components/BookmarkListItem";
+import QueryResultDisplay from "components/QueryResultDisplay";
+import SettingsButton from "components/SettingsButton";
+import Snowman from "components/Snowman";
+import StandardPage from "components/StandardPage";
+import useBookmarks from "hooks/useBookmarks";
 
 const ListPage = () => {
     const pageRef = useRef<HTMLElement | null>(null);

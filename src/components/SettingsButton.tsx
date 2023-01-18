@@ -1,6 +1,6 @@
 import { IonButton, IonIcon, useIonModal } from "@ionic/react";
 import { settingsOutline } from "ionicons/icons";
-import SettingsPage from "../pages/SettingsPage";
+import SettingsPage from "pages/SettingsPage";
 
 interface SettingsButtonProps {
     containingPage: HTMLElement | null;

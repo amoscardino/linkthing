@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBookmarks } from '../api/linkdigApi';
-import Bookmark from "../api/types/bookmark";
-import { QueryResult } from "../types/results";
+import { getBookmarks } from 'api/linkdigApi';
+import Bookmark from "api/types/bookmark";
+import { QueryResult } from "types/results";
 
 interface UseBookmarksResult extends QueryResult {
     bookmarks?: Bookmark[];

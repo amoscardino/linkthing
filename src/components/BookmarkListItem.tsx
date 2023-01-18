@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import {
     IonIcon,
     IonItem,
@@ -6,12 +7,11 @@ import {
     IonItemSliding,
     IonLabel
 } from "@ionic/react";
-import Bookmark from "../api/types/bookmark";
 import { Browser } from '@capacitor/browser';
-import { bookmarkOutline, checkmark, pencilOutline } from "ionicons/icons";
+import { bookmark, checkmark } from "ionicons/icons";
 import { format, parseISO } from "date-fns";
-import { toggleBookmarkRead } from "../api/linkdigApi";
-import { useRef } from "react";
+import Bookmark from "api/types/bookmark";
+import { toggleBookmarkRead } from "api/linkdigApi";
 
 interface BookmarkListItemProps {
     bookmark: Bookmark;
@@ -38,8 +38,11 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
     return (
         <IonItemSliding ref={slidingRef}>
             <IonItem onClick={handleItemClick} button>
-                {unread && <IonIcon slot="start" icon={bookmarkOutline} color="primary"></IonIcon>}
-                {!unread && <IonIcon slot="start"></IonIcon>}
+                <IonIcon
+                    slot="start"
+                    color="primary"
+                    icon={unread ? bookmark : undefined}
+                />
 
                 <IonLabel>
                     <h2>
@@ -71,7 +74,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
 
                     {!unread && (
                         <>
-                            <IonIcon slot="start" icon={bookmarkOutline} />
+                            <IonIcon slot="start" icon={bookmark} />
                             Unread
                         </>
                     )}

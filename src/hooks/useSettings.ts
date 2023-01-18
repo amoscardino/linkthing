@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import * as settingsApi from "../api/settingsApi";
-import { Settings } from "../api/types/settings";
-import queryClient from "../utils/queryClient";
+import * as settingsApi from "api/settingsApi";
+import { Settings } from "api/types/settings";
+import queryClient from "utils/queryClient";
 
 interface UseSettingsResult {
     settings: Settings;
