@@ -8,7 +8,7 @@ import {
     IonLabel
 } from "@ionic/react";
 import { Browser } from '@capacitor/browser';
-import { book, bookmark as bookmarkIcon, checkmark } from "ionicons/icons";
+import { bookmark as bookmarkIcon, checkmark } from "ionicons/icons";
 import { format, parseISO } from "date-fns";
 import Bookmark from "api/types/bookmark";
 import { toggleBookmarkRead } from "api/linkdigApi";
@@ -44,13 +44,15 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
                     icon={bookmark.unread ? bookmarkIcon : undefined}
                 />
 
-                <IonLabel>
-                    <h2>
+                <IonLabel className="ion-text-wrap">
+                    <h2 className="two-line-truncate">
                         {bookmark.website_title || bookmark.title || bookmark.url}
                     </h2>
-                    <p>
+
+                    <p className="two-line-truncate">
                         {bookmark.website_description || bookmark.description}
                     </p>
+
                     <p>
                         <small>
                             {date} — {domain}

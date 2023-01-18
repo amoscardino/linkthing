@@ -3,8 +3,7 @@ import {
     IonList,
     IonSegment,
     IonSegmentButton,
-    IonToolbar,
-    SegmentChangeEventDetail
+    IonToolbar
 } from "@ionic/react";
 import BookmarkListItem from "components/BookmarkListItem";
 import QueryResultDisplay from "components/QueryResultDisplay";
@@ -23,15 +22,11 @@ const ListPage = () => {
         await refresh();
     };
 
-    const handleFilterChange = (evt: CustomEvent<SegmentChangeEventDetail>) => {
-        setFilter(evt.detail.value || 'unread');
-    };
-
     const listFooter = (
         <IonToolbar>
             <IonSegment
                 value={filter}
-                onIonChange={handleFilterChange}
+                onIonChange={(e) => setFilter(e.detail.value || 'unread')}
                 style={{ minWidth: '60%' }}
             >
                 <IonSegmentButton value="unread">
@@ -58,13 +53,15 @@ const ListPage = () => {
                 isError={isError}
                 isEmpty={!bookmarks?.length}
                 successRender={() => (
-                    <IonList>
-                        {(bookmarks || []).map(bookmark => (
-                            <BookmarkListItem key={bookmark.id} bookmark={bookmark} listRefresh={refresh} />
-                        ))}
+                    <>
+                        <IonList>
+                            {(bookmarks || []).map(bookmark => (
+                                <BookmarkListItem key={bookmark.id} bookmark={bookmark} listRefresh={refresh} />
+                            ))}
+                        </IonList>
 
                         <Snowman />
-                    </IonList>
+                    </>
                 )}
                 errorMessage="Unable to load bookmarks. Maybe check your settings?"
                 emptyRender={() => <>No bookmarks found.</>}
