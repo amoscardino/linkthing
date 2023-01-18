@@ -8,7 +8,7 @@ import {
     IonLabel
 } from "@ionic/react";
 import { Browser } from '@capacitor/browser';
-import { bookmark, checkmark } from "ionicons/icons";
+import { book, bookmark as bookmarkIcon, checkmark } from "ionicons/icons";
 import { format, parseISO } from "date-fns";
 import Bookmark from "api/types/bookmark";
 import { toggleBookmarkRead } from "api/linkdigApi";
@@ -20,18 +20,18 @@ interface BookmarkListItemProps {
 
 const BookmarkListItem = (props: BookmarkListItemProps) => {
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
-    const { id, url, date_added, unread, title, description } = props.bookmark;
-    const domain = new URL(url).hostname.replace('www.', '');
-    const dateAdded = parseISO(date_added);
+    const { bookmark } = props;
+    const domain = new URL(bookmark.url).hostname.replace('www.', '');
+    const dateAdded = parseISO(bookmark.date_added);
     const date = format(dateAdded, 'MMM d yyyy');
 
     const handleItemClick = async (): Promise<void> => {
-        await Browser.open({ url: url });
+        await Browser.open({ url: bookmark.url });
     };
 
     const handleToggleReadClick = async () => {
         await slidingRef.current?.close();
-        await toggleBookmarkRead(id);
+        await toggleBookmarkRead(bookmark.id);
         await props.listRefresh();
     };
 
@@ -41,15 +41,15 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
                 <IonIcon
                     slot="start"
                     color="primary"
-                    icon={unread ? bookmark : undefined}
+                    icon={bookmark.unread ? bookmarkIcon : undefined}
                 />
 
                 <IonLabel>
                     <h2>
-                        {title}
+                        {bookmark.website_title || bookmark.title || bookmark.url}
                     </h2>
                     <p>
-                        {description}
+                        {bookmark.website_description || bookmark.description}
                     </p>
                     <p>
                         <small>
@@ -65,16 +65,16 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
                     expandable
                     onClick={handleToggleReadClick}
                 >
-                    {unread && (
+                    {bookmark.unread && (
                         <>
                             <IonIcon slot="start" icon={checkmark} />
                             Read
                         </>
                     )}
 
-                    {!unread && (
+                    {!bookmark.unread && (
                         <>
-                            <IonIcon slot="start" icon={bookmark} />
+                            <IonIcon slot="start" icon={bookmarkIcon} />
                             Unread
                         </>
                     )}
