@@ -1,5 +1,8 @@
 import { useRef, useState } from "react";
 import {
+    InfiniteScrollCustomEvent,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     IonList,
     IonSegment,
     IonSegmentButton,
@@ -14,19 +17,31 @@ import useBookmarks from "hooks/useBookmarks";
 
 const ListPage = () => {
     const pageRef = useRef<HTMLElement | null>(null);
-    const [filter, setFilter] = useState<string>('unread');
-    const bookmarksQuery = filter === 'unread' ? '!unread' : undefined;
-    const { bookmarks, isSuccess, isLoading, isError, refresh } = useBookmarks(bookmarksQuery);
+    const [unreadOnly, setUnreadOnly] = useState<boolean>(true);
+    const {
+        bookmarks,
+        isSuccess,
+        isLoading,
+        isError,
+        refresh,
+        canLoadMore,
+        loadMore
+    } = useBookmarks(unreadOnly);
 
     const handleRefresh = async (): Promise<void> => {
         await refresh();
     };
 
+    const handleInfiniteScroll = async (evt: InfiniteScrollCustomEvent) => {
+        await loadMore();
+        await evt.target.complete();
+    };
+
     const listFooter = (
         <IonToolbar>
             <IonSegment
-                value={filter}
-                onIonChange={(e) => setFilter(e.detail.value || 'unread')}
+                value={unreadOnly ? 'unread' : 'all'}
+                onIonChange={(e) => setUnreadOnly((e.detail.value || 'unread') === 'unread')}
                 style={{ minWidth: '60%' }}
             >
                 <IonSegmentButton value="unread">
@@ -60,7 +75,15 @@ const ListPage = () => {
                             ))}
                         </IonList>
 
-                        <Snowman />
+                        <IonInfiniteScroll
+                            onIonInfinite={handleInfiniteScroll}
+                            disabled={!canLoadMore}
+                            className="ion-margin-top"
+                        >
+                            <IonInfiniteScrollContent />
+                        </IonInfiniteScroll>
+
+                        {!canLoadMore && <Snowman />}
                     </>
                 )}
                 errorMessage="Unable to load bookmarks. Maybe check your settings?"

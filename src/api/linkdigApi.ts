@@ -3,16 +3,27 @@ import { getSettings } from "./settingsApi";
 import Bookmark from "./types/bookmark";
 import BookmarkResult from "./types/bookmarkResult";
 
-const getBookmarks = async (query?: string): Promise<Bookmark[]> => {
+const PAGE_SIZE = 10;
+
+const getBookmarks = async (query?: string, page: number = 0): Promise<BookmarkResult> => {
     const settings = await getSettings();
 
     if (settings.instanceUrl === undefined || settings.token === undefined)
         throw new Error('Missing Linkdig settings. Please provide them from the Settings page.');
 
+    // Add a delay to debug loading states
+    // await new Promise<void>(resolve => setTimeout(() => resolve(), 2000));
+
     const url = new URL('api/bookmarks/', settings.instanceUrl);
+    const params = new URLSearchParams();
 
     if (query)
-        url.search = new URLSearchParams({ q: query }).toString();
+        params.append('q', query);
+
+    params.append('limit', PAGE_SIZE.toString());
+    params.append('offset', (page * PAGE_SIZE).toString());
+
+    url.search = params.toString();
 
     const response = await CapacitorHttp.get({
         url: url.toString(),
@@ -24,7 +35,11 @@ const getBookmarks = async (query?: string): Promise<Bookmark[]> => {
     if (response.status !== 200)
         throw new Error('Unable to load bookmarks');
 
-    return (response.data as BookmarkResult).results;
+    return {
+        prevPage: response.data.previous ? page - 1 : undefined,
+        nextPage: response.data.next ? page + 1 : undefined,
+        results: response.data.results as Bookmark[]
+    };
 };
 
 const getBookmark = async (id: number): Promise<Bookmark> => {
