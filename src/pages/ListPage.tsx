@@ -1,13 +1,18 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     InfiniteScrollCustomEvent,
+    IonButton,
+    IonButtons,
+    IonIcon,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
     IonList,
+    IonSearchbar,
     IonSegment,
     IonSegmentButton,
     IonToolbar
 } from "@ionic/react";
+import { search } from "ionicons/icons";
 import BookmarkListItem from "components/BookmarkListItem";
 import QueryResultDisplay from "components/QueryResultDisplay";
 import SettingsButton from "components/SettingsButton";
@@ -17,7 +22,10 @@ import useBookmarks from "hooks/useBookmarks";
 
 const ListPage = () => {
     const pageRef = useRef<HTMLElement | null>(null);
+    const searchbarRef = useRef<HTMLIonSearchbarElement | null>(null);
     const [unreadOnly, setUnreadOnly] = useState<boolean>(true);
+    const [showSearch, setShowSearch] = useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const {
         bookmarks,
         isSuccess,
@@ -26,7 +34,16 @@ const ListPage = () => {
         refresh,
         canLoadMore,
         loadMore
-    } = useBookmarks(unreadOnly);
+    } = useBookmarks(showSearch, unreadOnly, searchQuery);
+
+    useEffect(() => {
+        const timeoutId = setTimeout(async () => {
+            if (showSearch)
+                await searchbarRef.current?.setFocus();
+        }, 50);
+
+        return () => clearTimeout(timeoutId);
+    }, [showSearch]);
 
     const handleRefresh = async (): Promise<void> => {
         await refresh();
@@ -37,31 +54,56 @@ const ListPage = () => {
         await evt.target.complete();
     };
 
-    const listFooter = (
-        <IonToolbar>
-            <IonSegment
-                value={unreadOnly ? 'unread' : 'all'}
-                onIonChange={(e) => setUnreadOnly((e.detail.value || 'unread') === 'unread')}
-                style={{ minWidth: '60%' }}
-            >
-                <IonSegmentButton value="unread">
-                    Unread
-                </IonSegmentButton>
-                <IonSegmentButton value="all">
-                    All
-                </IonSegmentButton>
-            </IonSegment>
-        </IonToolbar>
-    );
+    const footerToolbar = !showSearch
+        ? (
+            <IonToolbar>
+                <IonSegment
+                    value={unreadOnly ? 'unread' : 'all'}
+                    onIonChange={(e) => setUnreadOnly((e.detail.value || 'unread') === 'unread')}
+                    style={{ minWidth: '60%' }}
+                >
+                    <IonSegmentButton value="unread">
+                        Unread
+                    </IonSegmentButton>
+                    <IonSegmentButton value="all">
+                        All
+                    </IonSegmentButton>
+                </IonSegment>
+
+                <IonButtons slot="start">
+                    <SettingsButton onChanges={handleRefresh} containingPage={pageRef.current} />
+                </IonButtons>
+
+                <IonButtons slot="end">
+                    <IonButton onClick={() => setShowSearch(true)}>
+                        <IonIcon slot="icon-only" icon={search} />
+                    </IonButton>
+                </IonButtons>
+            </IonToolbar>
+        )
+        : undefined;
+
+    const cancelSearchButton = showSearch
+        ? (<IonButton onClick={() => setShowSearch(false)}>Cancel</IonButton>)
+        : undefined;
 
     return (
         <StandardPage
             title="Bookmarks"
             ref={pageRef}
-            primaryButton={<SettingsButton onChanges={handleRefresh} containingPage={pageRef.current} />}
+            primaryButton={cancelSearchButton}
             onPullToRefresh={handleRefresh}
-            footer={listFooter}
+            footer={footerToolbar}
         >
+            {showSearch && (
+                <IonSearchbar
+                    ref={searchbarRef}
+                    value={searchQuery}
+                    onIonChange={e => setSearchQuery(e.detail.value || '')}
+                    debounce={750}
+                />
+            )}
+
             <QueryResultDisplay
                 isSuccess={isSuccess}
                 isLoading={isLoading}

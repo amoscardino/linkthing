@@ -34,7 +34,7 @@
         "local-cors-proxy": "lcp --proxyUrl 'http://linkding.me' --proxyPartial ''",
         "build": "ionic build",
         "ios:build": "ionic cap sync ios",
-        "ios:run": "ionic cap run ios",
+        "ios:run": "ionic cap run ios -l",
         "ios:open": "ionic cap open ios"
     },
     "eslintConfig": {

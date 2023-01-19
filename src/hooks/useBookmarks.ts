@@ -10,9 +10,9 @@ interface UseBookmarksResult extends QueryResult {
     loadMore: () => Promise<void>;
 }
 
-const useBookmarks = (unread: boolean): UseBookmarksResult => {
-    const queryKey = ['bookmarks', unread];
-    const query = unread ? '!unread' : undefined;
+const useBookmarks = (search: boolean, unreadOnly: boolean, searchQuery: string): UseBookmarksResult => {
+    const query = search ? searchQuery : unreadOnly ? '!unread' : undefined;
+    const queryKey = ['bookmarks', query];
 
     const {
         data,
