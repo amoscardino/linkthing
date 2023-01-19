@@ -6,7 +6,6 @@ import {
     IonItem,
     IonLabel,
     IonList,
-    IonListHeader,
     IonNote
 } from "@ionic/react";
 import { checkmarkOutline, closeOutline } from "ionicons/icons";
@@ -63,10 +62,8 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
             secondaryButton={closeButton}
         >
             <IonList className="ion-padding-vertical" style={{ background: '' }}>
-                <IonListHeader>Linkdig Settings</IonListHeader>
-
                 <IonItem>
-                    <IonLabel position="floating">
+                    <IonLabel position="stacked">
                         Instance URL
                     </IonLabel>
 
@@ -79,16 +76,14 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                         autocomplete="off"
                         onIonChange={handleInstanceUrlChange}
                     />
-                </IonItem>
 
-                <IonItem lines="none">
-                    <IonNote className="ion-padding-vertical" style={{ fontSize: "75%" }}>
+                    <IonNote slot="helper" className="ion-margin-bottom">
                         What URL you use to access Linkdig. This should start with <code>http</code> or <code>https</code>.
                     </IonNote>
                 </IonItem>
 
                 <IonItem>
-                    <IonLabel position="floating">
+                    <IonLabel position="stacked">
                         API Token
                     </IonLabel>
 
@@ -101,15 +96,13 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                         autocomplete="off"
                         onIonChange={handleTokenChange}
                     />
-                </IonItem>
 
-                <IonItem lines="none">
-                    <IonNote className="ion-padding-vertical" style={{ fontSize: "75%" }}>
+                    <IonNote slot="helper">
                         Your REST API token from Settings &gt; Integrations.
                     </IonNote>
                 </IonItem>
             </IonList>
-        </StandardPage>
+        </StandardPage >
     );
 };
 

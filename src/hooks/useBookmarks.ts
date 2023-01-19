@@ -2,7 +2,6 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { getBookmarks } from 'api/linkdigApi';
 import Bookmark from "api/types/bookmark";
 import { QueryResult } from "types/results";
-import queryClient from "utils/queryClient";
 
 interface UseBookmarksResult extends QueryResult {
     bookmarks?: Bookmark[];

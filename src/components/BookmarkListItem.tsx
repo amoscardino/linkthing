@@ -5,25 +5,37 @@ import {
     IonItemOption,
     IonItemOptions,
     IonItemSliding,
-    IonLabel
+    IonLabel,
+    useIonModal
 } from "@ionic/react";
 import { Browser } from '@capacitor/browser';
-import { bookmark as bookmarkIcon, checkmark } from "ionicons/icons";
+import { bookmark as bookmarkIcon, checkmark, pencilOutline } from "ionicons/icons";
 import { format, parseISO } from "date-fns";
 import Bookmark from "api/types/bookmark";
 import { toggleBookmarkRead } from "api/linkdigApi";
+import EditPage from "pages/EditPage";
 
 interface BookmarkListItemProps {
     bookmark: Bookmark;
-    listRefresh: () => Promise<void>
+    listRefresh: () => Promise<void>;
+    containingPage: HTMLElement | null;
 }
 
-const BookmarkListItem = (props: BookmarkListItemProps) => {
+const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkListItemProps) => {
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
-    const { bookmark } = props;
     const domain = new URL(bookmark.url).hostname.replace('www.', '');
     const dateAdded = parseISO(bookmark.date_added);
     const date = format(dateAdded, 'MMM d yyyy');
+
+    const handleDismiss = async (anyChanges: boolean) => {
+        if (anyChanges)
+            await listRefresh();
+
+        dismissEditModal();
+        await slidingRef.current?.close();
+    };
+
+    const [showEditModal, dismissEditModal] = useIonModal(EditPage, { id: bookmark.id, dismiss: handleDismiss });
 
     const handleItemClick = async (): Promise<void> => {
         await Browser.open({ url: bookmark.url });
@@ -32,7 +44,14 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
     const handleToggleReadClick = async () => {
         await slidingRef.current?.close();
         await toggleBookmarkRead(bookmark.id);
-        await props.listRefresh();
+        await listRefresh();
+    };
+
+    const handleEditOptionClick = () => {
+        showEditModal({
+            swipeToClose: true,
+            presentingElement: containingPage || undefined
+        });
     };
 
     return (
@@ -46,12 +65,14 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
 
                 <IonLabel className="ion-text-wrap">
                     <h2 className="two-line-truncate">
-                        {bookmark.website_title || bookmark.title || bookmark.url}
+                        {bookmark.title || bookmark.website_title || bookmark.url}
                     </h2>
 
-                    <p className="two-line-truncate">
-                        {bookmark.website_description || bookmark.description}
-                    </p>
+                    {!!(bookmark.description || bookmark.website_description) && (
+                        <p className="two-line-truncate">
+                            {bookmark.description || bookmark.website_description}
+                        </p>
+                    )}
 
                     <p>
                         <small>
@@ -83,13 +104,16 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
                 </IonItemOption>
             </IonItemOptions>
 
-            {/* <IonItemOptions side="end">
-                <IonItemOption color="medium" disabled>
+            <IonItemOptions side="end">
+                <IonItemOption
+                    onClick={handleEditOptionClick}
+                    color="medium"
+                >
                     <IonIcon slot="start" icon={pencilOutline} />
                     Edit
                 </IonItemOption>
-            </IonItemOptions> */}
-        </IonItemSliding>
+            </IonItemOptions>
+        </IonItemSliding >
     );
 };
 

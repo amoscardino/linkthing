@@ -4,8 +4,8 @@ export default interface Bookmark {
     url: string;
     title: string;
     description: string | null;
-    website_title: string | null | null;
-    website_description: null;
+    website_title: string | null;
+    website_description: string | null;
     is_archived: boolean;
     unread: boolean;
     shared: boolean;

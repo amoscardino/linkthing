@@ -23,7 +23,7 @@ const useSettings = (): UseSettingsResult => {
 
     const persistSettings = async (): Promise<void> => {
         await settingsApi.saveSettings(settings);
-        queryClient.invalidateQueries();
+        await queryClient.invalidateQueries();
     };
 
     return {

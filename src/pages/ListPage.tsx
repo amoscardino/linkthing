@@ -71,7 +71,12 @@ const ListPage = () => {
                     <>
                         <IonList>
                             {(bookmarks || []).map(bookmark => (
-                                <BookmarkListItem key={bookmark.id} bookmark={bookmark} listRefresh={refresh} />
+                                <BookmarkListItem
+                                    key={bookmark.id}
+                                    bookmark={bookmark}
+                                    listRefresh={handleRefresh}
+                                    containingPage={pageRef.current}
+                                />
                             ))}
                         </IonList>
 
