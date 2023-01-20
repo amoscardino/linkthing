@@ -8,8 +8,13 @@ import {
     IonLabel,
     useIonModal
 } from "@ionic/react";
+import {
+    bookmark as bookmarkIcon,
+    bookmarkOutline,
+    checkmark,
+    pencilOutline
+} from "ionicons/icons";
 import { Browser } from '@capacitor/browser';
-import { bookmark as bookmarkIcon, checkmark, pencilOutline } from "ionicons/icons";
 import { format, parseISO } from "date-fns";
 import Bookmark from "api/types/bookmark";
 import { toggleBookmarkRead } from "api/linkdigApi";
@@ -25,7 +30,7 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
     const domain = new URL(bookmark.url).hostname.replace('www.', '');
     const dateAdded = parseISO(bookmark.date_added);
-    const date = format(dateAdded, 'MMM d yyyy');
+    const date = format(dateAdded, 'MMM d, yyyy');
 
     const handleDismiss = async (anyChanges: boolean) => {
         if (anyChanges)
@@ -37,11 +42,11 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
 
     const [showEditModal, dismissEditModal] = useIonModal(EditPage, { id: bookmark.id, dismiss: handleDismiss });
 
-    const handleItemClick = async (): Promise<void> => {
+    const handleItemClick = async () => {
         await Browser.open({ url: bookmark.url });
     };
 
-    const handleToggleReadClick = async () => {
+    const handleToggleReadOptionClick = async () => {
         await slidingRef.current?.close();
         await toggleBookmarkRead(bookmark.id);
         await listRefresh();
@@ -82,32 +87,20 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
                 </IonLabel>
             </IonItem>
 
-            <IonItemOptions side="start" onIonSwipe={handleToggleReadClick}>
+            <IonItemOptions side="start">
                 <IonItemOption
                     color="primary"
-                    expandable
-                    onClick={handleToggleReadClick}
+                    onClick={handleToggleReadOptionClick}
                 >
-                    {bookmark.unread && (
-                        <>
-                            <IonIcon slot="start" icon={checkmark} />
-                            Read
-                        </>
-                    )}
-
-                    {!bookmark.unread && (
-                        <>
-                            <IonIcon slot="start" icon={bookmarkIcon} />
-                            Unread
-                        </>
-                    )}
+                    <IonIcon slot="start" icon={bookmark.unread ? checkmark : bookmarkOutline} />
+                    {bookmark.unread ? 'Read' : 'Unread'}
                 </IonItemOption>
             </IonItemOptions>
 
             <IonItemOptions side="end">
                 <IonItemOption
+                    color="secondary"
                     onClick={handleEditOptionClick}
-                    color="medium"
                 >
                     <IonIcon slot="start" icon={pencilOutline} />
                     Edit
