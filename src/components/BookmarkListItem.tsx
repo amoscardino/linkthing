@@ -132,6 +132,7 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
                     <IonIcon slot="start" icon={shareOutline} />
                     Share
                 </IonItemOption>
+
                 <IonItemOption
                     color="secondary"
                     onClick={handleEditOptionClick}
