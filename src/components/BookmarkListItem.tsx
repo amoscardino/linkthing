@@ -6,15 +6,19 @@ import {
     IonItemOptions,
     IonItemSliding,
     IonLabel,
-    useIonModal
+    useIonModal,
+    useIonToast
 } from "@ionic/react";
 import {
     bookmark as bookmarkIcon,
     bookmarkOutline,
     checkmark,
-    pencilOutline
+    pencilOutline,
+    sadOutline,
+    shareOutline
 } from "ionicons/icons";
 import { Browser } from '@capacitor/browser';
+import { Share } from '@capacitor/share';
 import { format, parseISO } from "date-fns";
 import Bookmark from "api/types/bookmark";
 import { toggleBookmarkRead } from "api/linkdigApi";
@@ -28,6 +32,7 @@ interface BookmarkListItemProps {
 
 const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkListItemProps) => {
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
+    const [showToast, dismissToast] = useIonToast();
     const domain = new URL(bookmark.url).hostname.replace('www.', '');
     const dateAdded = parseISO(bookmark.date_added);
     const date = format(dateAdded, 'MMM d, yyyy');
@@ -50,6 +55,28 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
         await slidingRef.current?.close();
         await toggleBookmarkRead(bookmark.id);
         await listRefresh();
+    };
+
+    const handleShareOptionClick = async () => {
+        if ((await Share.canShare()).value) {
+            await Share.share({
+                title: bookmark.title || bookmark.website_title || undefined,
+                text: bookmark.description || bookmark.website_description || undefined,
+                url: bookmark.url
+            });
+        }
+        else {
+            await dismissToast();
+            await showToast({
+                header: 'Oh, no!',
+                message: 'Sharing is not supported on this platform. Sorry about that.',
+                position: 'top',
+                duration: 2000,
+                icon: sadOutline,
+                translucent: true,
+                buttons: [{ text: 'Ok', handler: async () => dismissToast() }]
+            });
+        }
     };
 
     const handleEditOptionClick = () => {
@@ -98,6 +125,13 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
             </IonItemOptions>
 
             <IonItemOptions side="end">
+                <IonItemOption
+                    color="tertiary"
+                    onClick={handleShareOptionClick}
+                >
+                    <IonIcon slot="start" icon={shareOutline} />
+                    Share
+                </IonItemOption>
                 <IonItemOption
                     color="secondary"
                     onClick={handleEditOptionClick}
