@@ -10,6 +10,7 @@ import {
     useIonToast
 } from "@ionic/react";
 import {
+    arrowUndoOutline,
     bookmark as bookmarkIcon,
     bookmarkOutline,
     checkmark,
@@ -21,8 +22,9 @@ import { Browser } from '@capacitor/browser';
 import { Share } from '@capacitor/share';
 import { format, parseISO } from "date-fns";
 import Bookmark from "api/types/bookmark";
-import { toggleBookmarkRead } from "api/linkdigApi";
+import { updateBookmarkRead } from "api/linkdigApi";
 import EditPage from "pages/EditPage";
+import { tapMedium } from "utils/haptics";
 
 interface BookmarkListItemProps {
     bookmark: Bookmark;
@@ -52,9 +54,28 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
     };
 
     const handleToggleReadOptionClick = async () => {
+        const isUnread = bookmark.unread;
+        await updateBookmarkRead(bookmark.id, !isUnread);
         await slidingRef.current?.close();
-        await toggleBookmarkRead(bookmark.id);
+        await tapMedium();
         await listRefresh();
+        await dismissToast();
+        await showToast({
+            header: 'Bookmark Updated',
+            message: `This bookmark has been marked as ${isUnread ? 'read' : 'unread'}.`,
+            icon: bookmarkIcon,
+            duration: 3000,
+            buttons: [{
+                text: 'Undo',
+                icon: arrowUndoOutline,
+                handler: async () => {
+                    await updateBookmarkRead(bookmark.id, isUnread);
+                    await tapMedium();
+                    await listRefresh();
+                    await dismissToast();
+                }
+            }]
+        });
     };
 
     const handleShareOptionClick = async () => {
