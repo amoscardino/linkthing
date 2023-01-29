@@ -23,7 +23,6 @@ import { updateBookmarkRead } from "api/linkdigApi";
 import EditPage from "pages/EditPage";
 import { tapMedium } from "utils/haptics";
 import { useQueryClient } from "@tanstack/react-query";
-import classNames from "classnames";
 
 interface BookmarkListItemProps {
     id: number;
@@ -110,12 +109,12 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
             <IonItem onClick={handleItemClick} button>
                 <IonIcon
                     slot="start"
-                    color="primary"
+                    color={unread ? "primary" : "medium"}
                     icon={unread ? bookmark : bookmarkOutline}
                 />
 
                 <IonLabel className="ion-text-wrap">
-                    <h2 className={classNames("two-line-truncate", { 'text-bold': unread })}>
+                    <h2 className="two-line-truncate">
                         {title}
                     </h2>
 
