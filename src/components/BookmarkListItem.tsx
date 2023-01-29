@@ -10,10 +10,8 @@ import {
     useIonToast
 } from "@ionic/react";
 import {
-    arrowUndoOutline,
-    bookmark as bookmarkIcon,
+    bookmark,
     bookmarkOutline,
-    checkmark,
     pencilOutline,
     sadOutline,
     shareOutline
@@ -21,23 +19,29 @@ import {
 import { Browser } from '@capacitor/browser';
 import { Share } from '@capacitor/share';
 import { format, parseISO } from "date-fns";
-import Bookmark from "api/types/bookmark";
 import { updateBookmarkRead } from "api/linkdigApi";
 import EditPage from "pages/EditPage";
 import { tapMedium } from "utils/haptics";
+import { useQueryClient } from "@tanstack/react-query";
+import classNames from "classnames";
 
 interface BookmarkListItemProps {
-    bookmark: Bookmark;
+    id: number;
+    url: string;
+    title: string;
+    description: string | null;
+    unread: boolean;
+    dateAdded: string;
     listRefresh: () => Promise<void>;
     containingPage: HTMLElement | null;
 }
 
-const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkListItemProps) => {
+const BookmarkListItem = (props: BookmarkListItemProps) => {
+    const { id, title, description, url, unread, listRefresh, containingPage } = props;
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
     const [showToast, dismissToast] = useIonToast();
-    const domain = new URL(bookmark.url).hostname.replace('www.', '');
-    const dateAdded = parseISO(bookmark.date_added);
-    const date = format(dateAdded, 'MMM d, yyyy');
+    const queryClient = useQueryClient();
+    const domain = new URL(url).hostname.replace('www.', '');
 
     const handleDismiss = async (anyChanges: boolean) => {
         if (anyChanges)
@@ -47,43 +51,37 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
         await slidingRef.current?.close();
     };
 
-    const [showEditModal, dismissEditModal] = useIonModal(EditPage, { id: bookmark.id, dismiss: handleDismiss });
+    const [showEditModal, dismissEditModal] = useIonModal(EditPage, { id, dismiss: handleDismiss });
 
     const handleItemClick = async () => {
-        await Browser.open({ url: bookmark.url });
+        await Browser.open({ url: url });
     };
 
     const handleToggleReadOptionClick = async () => {
-        const isUnread = bookmark.unread;
-        await updateBookmarkRead(bookmark.id, !isUnread);
         await slidingRef.current?.close();
+
+        await updateBookmarkRead(id);
+        await queryClient.invalidateQueries(['bookmarks']);
+
         await tapMedium();
         await listRefresh();
         await dismissToast();
+
         await showToast({
             header: 'Bookmark Updated',
-            message: `This bookmark has been marked as ${isUnread ? 'read' : 'unread'}.`,
-            icon: bookmarkIcon,
+            message: `This bookmark has been marked as ${unread ? 'read' : 'unread'}.`,
+            icon: unread ? bookmarkOutline : bookmark,
             duration: 3000,
-            buttons: [{
-                text: 'Undo',
-                icon: arrowUndoOutline,
-                handler: async () => {
-                    await updateBookmarkRead(bookmark.id, isUnread);
-                    await tapMedium();
-                    await listRefresh();
-                    await dismissToast();
-                }
-            }]
+            buttons: [{ text: 'Ok', handler: async () => dismissToast() }]
         });
     };
 
     const handleShareOptionClick = async () => {
         if ((await Share.canShare()).value) {
             await Share.share({
-                title: bookmark.title || bookmark.website_title || undefined,
-                text: bookmark.description || bookmark.website_description || undefined,
-                url: bookmark.url
+                title: title,
+                text: description || undefined,
+                url: url
             });
         }
         else {
@@ -113,23 +111,23 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
                 <IonIcon
                     slot="start"
                     color="primary"
-                    icon={bookmark.unread ? bookmarkIcon : undefined}
+                    icon={unread ? bookmark : bookmarkOutline}
                 />
 
                 <IonLabel className="ion-text-wrap">
-                    <h2 className="two-line-truncate">
-                        {bookmark.title || bookmark.website_title || bookmark.url}
+                    <h2 className={classNames("two-line-truncate", { 'text-bold': unread })}>
+                        {title}
                     </h2>
 
-                    {!!(bookmark.description || bookmark.website_description) && (
+                    {!!description && (
                         <p className="two-line-truncate">
-                            {bookmark.description || bookmark.website_description}
+                            {description}
                         </p>
                     )}
 
                     <p>
                         <small>
-                            {date} — {domain}
+                            {format(parseISO(props.dateAdded), 'MMM d, yyyy')} — {domain}
                         </small>
                     </p>
                 </IonLabel>
@@ -140,8 +138,19 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
                     color="primary"
                     onClick={handleToggleReadOptionClick}
                 >
-                    <IonIcon slot="start" icon={bookmark.unread ? checkmark : bookmarkOutline} />
-                    {bookmark.unread ? 'Read' : 'Unread'}
+                    {unread && (
+                        <>
+                            <IonIcon slot="start" icon={bookmarkOutline} />
+                            Read
+                        </>
+                    )}
+
+                    {!unread && (
+                        <>
+                            <IonIcon slot="start" icon={bookmark} />
+                            Unread
+                        </>
+                    )}
                 </IonItemOption>
             </IonItemOptions>
 

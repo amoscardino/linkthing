@@ -63,17 +63,18 @@ const getBookmark = async (id: number): Promise<Bookmark> => {
     return response.data as Bookmark;
 };
 
-const updateBookmarkRead = async (id: number, unread: boolean): Promise<void> => {
+const updateBookmarkRead = async (id: number): Promise<void> => {
     const settings = await getSettings();
 
     if (settings.instanceUrl === undefined || settings.token === undefined)
         throw new Error('Missing Linkdig settings. Please provide them from the Settings page.');
 
+    const bookmark = await getBookmark(id);
     const url = new URL(`api/bookmarks/${id}/`, settings.instanceUrl);
 
     await CapacitorHttp.patch({
         url: url.toString(),
-        data: { unread },
+        data: { unread: !bookmark.unread },
         headers: {
             'Authorization': `Token ${settings.token}`,
             'Content-Type': 'application/json'

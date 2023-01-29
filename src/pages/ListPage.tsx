@@ -115,7 +115,12 @@ const ListPage = () => {
                             {(bookmarks || []).map(bookmark => (
                                 <BookmarkListItem
                                     key={bookmark.id}
-                                    bookmark={bookmark}
+                                    id={bookmark.id}
+                                    url={bookmark.url}
+                                    title={bookmark.title || bookmark.website_title || bookmark.url}
+                                    description={bookmark.description || bookmark.website_description}
+                                    unread={bookmark.unread}
+                                    dateAdded={bookmark.date_added}
                                     listRefresh={handleRefresh}
                                     containingPage={pageRef.current}
                                 />

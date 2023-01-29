@@ -6,6 +6,10 @@
     height: 100%;
 }
 
+.text-bold {
+    font-weight: bold !important;
+}
+
 .two-line-truncate {
     display: -webkit-box;
     -webkit-line-clamp: 2;
