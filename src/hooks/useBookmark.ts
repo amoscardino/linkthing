@@ -1,7 +1,7 @@
 import { SetStateAction, useEffect, useState } from "react";
-import queryClient from "utils/queryClient";
 import Bookmark from "api/types/bookmark";
 import { getBookmark, updateBookmark } from "api/linkdigApi";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface UseBookmarkResult {
     bookmark: Bookmark;
@@ -11,6 +11,7 @@ interface UseBookmarkResult {
 
 const useBookmark = (id: number): UseBookmarkResult => {
     const [bookmark, setBookmark] = useState({} as Bookmark);
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         const loadBookmark = async () => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as settingsApi from "api/settingsApi";
 import { Settings } from "api/types/settings";
-import queryClient from "utils/queryClient";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface UseSettingsResult {
     settings: Settings;
@@ -11,6 +11,7 @@ interface UseSettingsResult {
 
 const useSettings = (): UseSettingsResult => {
     const [settings, setSettings] = useState({} as Settings);
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         const loadSettings = async () => {

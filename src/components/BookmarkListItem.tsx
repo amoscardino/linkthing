@@ -13,16 +13,15 @@ import {
     bookmark,
     bookmarkOutline,
     pencilOutline,
-    sadOutline,
     shareOutline
 } from "ionicons/icons";
 import { Browser } from '@capacitor/browser';
-import { Share } from '@capacitor/share';
 import { format, parseISO } from "date-fns";
 import { updateBookmarkRead } from "api/linkdigApi";
 import EditPage from "pages/EditPage";
 import { tapMedium } from "utils/haptics";
 import { useQueryClient } from "@tanstack/react-query";
+import useBookmarkSharing from "hooks/useBookmarkSharing";
 
 interface BookmarkListItemProps {
     id: number;
@@ -38,6 +37,7 @@ interface BookmarkListItemProps {
 const BookmarkListItem = (props: BookmarkListItemProps) => {
     const { id, title, description, url, unread, listRefresh, containingPage } = props;
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
+    const { shareBookmark } = useBookmarkSharing();
     const [showToast, dismissToast] = useIonToast();
     const queryClient = useQueryClient();
     const domain = new URL(url).hostname.replace('www.', '');
@@ -76,25 +76,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
     };
 
     const handleShareOptionClick = async () => {
-        if ((await Share.canShare()).value) {
-            await Share.share({
-                title: title,
-                text: description || undefined,
-                url: url
-            });
-        }
-        else {
-            await dismissToast();
-            await showToast({
-                header: 'Oh, no!',
-                message: 'Sharing is not supported on this platform. Sorry about that.',
-                position: 'top',
-                duration: 2000,
-                icon: sadOutline,
-                translucent: true,
-                buttons: [{ text: 'Ok', handler: async () => dismissToast() }]
-            });
-        }
+        await shareBookmark(url, title, description);
     };
 
     const handleEditOptionClick = () => {

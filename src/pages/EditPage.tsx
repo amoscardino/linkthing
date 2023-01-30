@@ -72,6 +72,7 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
                     <IonInput
                         value={bookmark.title}
                         onIonChange={e => setBookmark(prev => ({ ...prev, title: e.target.value || '' } as Bookmark))}
+                        placeholder={bookmark.website_title || ''}
                     />
 
                     <IonNote slot="helper" className="ion-margin-bottom">
@@ -85,9 +86,11 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
                     </IonLabel>
 
                     <IonTextarea
-                        autoGrow
                         value={bookmark.description}
                         onIonChange={e => setBookmark(prev => ({ ...prev, description: e.target.value || '' } as Bookmark))}
+                        placeholder={bookmark.website_description || ''}
+                        autoGrow
+                        rows={4}
                     />
 
                     <IonNote slot="helper" className="ion-margin-bottom">
