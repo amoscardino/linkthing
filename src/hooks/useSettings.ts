@@ -1,30 +1,37 @@
 import React, { useEffect, useState } from "react";
-import * as settingsApi from "api/settingsApi";
 import { Settings } from "api/types/settings";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRecoilState } from "recoil";
+import hasSettingsAtom from "state/settingsState";
+import { getSettings, saveSettings } from "api/settingsApi";
 
 interface UseSettingsResult {
-    settings: Settings;
-    setSettings: (value: React.SetStateAction<Settings>) => void;
+    settings?: Settings;
+    setSettings: (value: React.SetStateAction<Settings | undefined>) => void;
     persistSettings: () => Promise<void>;
 }
 
 const useSettings = (): UseSettingsResult => {
-    const [settings, setSettings] = useState({} as Settings);
+    const [, setHasSettings] = useRecoilState(hasSettingsAtom);
+    const [settings, setSettings] = useState<Settings | undefined>(undefined);
     const queryClient = useQueryClient();
 
     useEffect(() => {
         const loadSettings = async () => {
-            const settings = await settingsApi.getSettings();
-            setSettings(settings);
+            setSettings(await getSettings());
         };
 
         loadSettings();
-    }, []);
+    }, [])
 
     const persistSettings = async (): Promise<void> => {
-        await settingsApi.saveSettings(settings);
-        await queryClient.invalidateQueries();
+        const hasSettings = settings !== undefined && (settings.instanceUrl?.length || 0) > 0 && (settings.token?.length || 0) > 0;
+
+        setHasSettings(hasSettings);
+        await saveSettings(settings);
+
+        if (hasSettings)
+            await queryClient.invalidateQueries();
     };
 
     return {

@@ -1,8 +1,8 @@
-import { IonCol, IonGrid, IonRow } from "@ionic/react";
 import { QueryResult } from "../types/results";
 import EmptyMessage from "./EmptyMessage";
 import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
+import StandardColumn from "./StandardColumn";
 
 interface QueryResultDisplayProps extends QueryResult {
     /** Optional prop to determine if the `emptyRender` prop should be used. `isSuccess` must also 
@@ -34,15 +34,7 @@ const QueryResultDisplay = (props: QueryResultDisplayProps): JSX.Element | null 
     if ((props.isEmpty || false) && props.emptyRender !== undefined)
         return <EmptyMessage>{props.emptyRender()}</EmptyMessage>;
 
-    return (
-        <IonGrid className="ion-no-padding">
-            <IonRow className="ion-justify-content-center">
-                <IonCol size="12" sizeSm="10" sizeMd="8" sizeLg="7" sizeXl="6">
-                    {props.successRender()}
-                </IonCol>
-            </IonRow>
-        </IonGrid>
-    );
+    return <StandardColumn>{props.successRender()}</StandardColumn>;
 };
 
 export default QueryResultDisplay;

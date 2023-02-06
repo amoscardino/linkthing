@@ -69,7 +69,7 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
 
                     <IonInput
                         name="instanceUrl"
-                        value={settings.instanceUrl}
+                        value={settings?.instanceUrl}
                         inputMode="url"
                         autocapitalize="off"
                         autocorrect="off"
@@ -89,7 +89,7 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
 
                     <IonInput
                         name="token"
-                        value={settings.token}
+                        value={settings?.token}
                         inputMode="url"
                         autocapitalize="off"
                         autocorrect="off"

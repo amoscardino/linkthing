@@ -26,6 +26,7 @@ ion-app.ios ion-toast::part(container) {
 
 ion-app.ios ion-card ion-item {
     --background: var(--ion-card-background, var(--ion-item-background, var(--ion-background-color, #fff)));
+    background: var(--background);
 }
 
 ion-app.ios ion-modal ion-list,

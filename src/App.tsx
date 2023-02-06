@@ -1,7 +1,9 @@
 import { IonApp, setupIonicReact } from '@ionic/react';
-import { QueryClientProvider } from '@tanstack/react-query';
-import queryClient from 'utils/queryClient';
+import { useRecoilValue } from 'recoil';
 import ListPage from 'pages/ListPage';
+import SetupPage from 'pages/SetupPage';
+import hasSettingsAtom from 'state/settingsState';
+import Loader from 'components/Loader';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -18,12 +20,28 @@ import 'theme/utils.css';
 
 setupIonicReact({ mode: 'ios' });
 
-const App = () => (
-    <IonApp>
-        <QueryClientProvider client={queryClient}>
-            <ListPage />
-        </QueryClientProvider>
-    </IonApp>
-);
+const App = () => {
+    const hasSettings = useRecoilValue(hasSettingsAtom)
+
+    return (
+        <IonApp>
+            {hasSettings !== null && (
+                <>
+                    {!hasSettings && (
+                        <SetupPage />
+                    )}
+
+                    {hasSettings && (
+                        <ListPage />
+                    )}
+                </>
+            )}
+
+            {hasSettings === null && (
+                <Loader />
+            )}
+        </IonApp>
+    );
+};
 
 export default App;

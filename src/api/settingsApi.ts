@@ -10,7 +10,10 @@ const getSettings = async (): Promise<Settings> => {
     return settings;
 };
 
-const saveSettings = async (settings: Settings): Promise<void> => {
+const saveSettings = async (settings?: Settings): Promise<void> => {
+    if (!settings)
+        return;
+
     await Preferences.set({ key: 'instanceUrl', value: settings.instanceUrl || '' });
     await Preferences.set({ key: 'token', value: settings.token || '' });
 };
