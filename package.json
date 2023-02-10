@@ -3,6 +3,7 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
+        "@capacitor/android": "4.6.1",
         "@capacitor/app": "4.1.1",
         "@capacitor/browser": "^4.1.1",
         "@capacitor/core": "4.6.3",

@@ -18,7 +18,7 @@ import '@ionic/react/css/display.css';
 import 'theme/variables.css';
 import 'theme/utils.css';
 
-setupIonicReact({ mode: 'ios' });
+setupIonicReact();
 
 const App = () => {
     const hasSettings = useRecoilValue(hasSettingsAtom)

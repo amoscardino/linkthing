@@ -15,18 +15,17 @@ const getBookmarks = async (query?: string, page: number = 0): Promise<BookmarkR
     // await new Promise<void>(resolve => setTimeout(() => resolve(), 2000));
 
     const url = new URL('api/bookmarks/', settings.instanceUrl);
-    const params = new URLSearchParams();
+    const params = {} as any;
 
     if (query)
-        params.append('q', query);
+        params.q = query;
 
-    params.append('limit', PAGE_SIZE.toString());
-    params.append('offset', (page * PAGE_SIZE).toString());
-
-    url.search = params.toString();
+    params.limit = PAGE_SIZE.toString();
+    params.offset = (page * PAGE_SIZE).toString();
 
     const response = await CapacitorHttp.get({
         url: url.toString(),
+        params: params,
         headers: {
             'Authorization': `Token ${settings.token}`
         }

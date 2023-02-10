@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">LinkThing</string>
+    <string name="title_activity_main">LinkThing</string>
+    <string name="package_name">com.moscardino.LinkThing</string>
+    <string name="custom_url_scheme">com.moscardino.LinkThing</string>
+</resources>
