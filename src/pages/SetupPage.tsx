@@ -20,6 +20,7 @@ import { Settings } from "api/types/settings";
 import logoHeader from 'assets/logoHeader.png';
 import StandardColumn from "components/StandardColumn";
 import { checkmark } from "ionicons/icons";
+import Footer from "components/Footer";
 
 const SetupPage = () => {
     const {
@@ -112,6 +113,8 @@ const SetupPage = () => {
                         </IonButton>
                     </div>
                 </IonCard>
+
+                <Footer />
             </StandardColumn>
         </StandardPage >
     );

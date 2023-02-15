@@ -13,6 +13,7 @@ import StandardPage from "components/StandardPage";
 import { tapMedium } from "utils/haptics";
 import useSettings from "hooks/useSettings";
 import { Settings } from "api/types/settings";
+import Footer from "components/Footer";
 
 interface SettingsPageProps {
     dismiss: (anyChanges: boolean) => void;
@@ -101,6 +102,8 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                         Your REST API token from Settings &gt; Integrations.
                     </IonNote>
                 </IonItem>
+
+                <Footer />
             </IonList>
         </StandardPage >
     );

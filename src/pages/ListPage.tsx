@@ -16,9 +16,9 @@ import { search } from "ionicons/icons";
 import BookmarkListItem from "components/BookmarkListItem";
 import QueryResultDisplay from "components/QueryResultDisplay";
 import SettingsButton from "components/SettingsButton";
-import Snowman from "components/Snowman";
 import StandardPage from "components/StandardPage";
 import useBookmarks from "hooks/useBookmarks";
+import Footer from "components/Footer";
 
 const ListPage = () => {
     const pageRef = useRef<HTMLElement | null>(null);
@@ -135,7 +135,7 @@ const ListPage = () => {
                             <IonInfiniteScrollContent />
                         </IonInfiniteScroll>
 
-                        {!canLoadMore && <Snowman />}
+                        {!canLoadMore && <Footer />}
                     </>
                 )}
                 errorMessage="Unable to load bookmarks. Maybe check your settings?"

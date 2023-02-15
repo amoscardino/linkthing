@@ -14,6 +14,7 @@ import StandardPage from "components/StandardPage";
 import { tapMedium } from "utils/haptics";
 import useBookmark from "hooks/useBookmark";
 import Bookmark from "api/types/bookmark";
+import Footer from "components/Footer";
 
 interface EditPageProps {
     id: number;
@@ -109,6 +110,8 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
                         onIonChange={e => setBookmark(prev => ({ ...prev, unread: e.target.checked } as Bookmark))}
                     />
                 </IonItem>
+
+                <Footer />
             </IonList>
         </StandardPage>
     );
