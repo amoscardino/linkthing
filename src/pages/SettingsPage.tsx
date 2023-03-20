@@ -6,6 +6,7 @@ import {
     IonItem,
     IonLabel,
     IonList,
+    IonListHeader,
     IonNote
 } from "@ionic/react";
 import { checkmarkOutline, closeOutline } from "ionicons/icons";
@@ -63,6 +64,10 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
             secondaryButton={closeButton}
         >
             <IonList className="ion-padding-vertical" style={{ background: '' }}>
+                <IonListHeader>
+                    Linkding Settings
+                </IonListHeader>
+
                 <IonItem>
                     <IonLabel position="stacked">
                         Instance URL
@@ -101,6 +106,28 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     <IonNote slot="helper">
                         Your REST API token from Settings &gt; Integrations.
                     </IonNote>
+                </IonItem>
+
+                <IonListHeader className="ion-margin-top ion-padding-top">
+                    About LinkThing
+                </IonListHeader>
+
+                <IonItem>
+                    <IonLabel>
+                        {`Version ${process.env.REACT_APP_VERSION}`}
+                    </IonLabel>
+                </IonItem>
+
+                <IonItem>
+                    <IonLabel>
+                        {`© ${new Date().getFullYear()} Andrew Moscardino`}
+                    </IonLabel>
+                </IonItem>
+
+                <IonItem href="https://moscardino.net" target="_blank">
+                    <IonLabel>
+                        moscardino.net
+                    </IonLabel>
                 </IonItem>
 
                 <Footer />
