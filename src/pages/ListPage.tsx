@@ -17,8 +17,9 @@ import BookmarkListItem from "components/BookmarkListItem";
 import QueryResultDisplay from "components/QueryResultDisplay";
 import SettingsButton from "components/SettingsButton";
 import StandardPage from "components/StandardPage";
-import useBookmarks from "hooks/useBookmarks";
 import Footer from "components/Footer";
+import AddButton from "components/AddButton";
+import useBookmarks from "hooks/useBookmarks";
 
 const ListPage = () => {
     const pageRef = useRef<HTMLElement | null>(null);
@@ -83,15 +84,15 @@ const ListPage = () => {
         )
         : undefined;
 
-    const cancelSearchButton = showSearch
+    const primaryHeaderButton = showSearch
         ? (<IonButton onClick={() => setShowSearch(false)}>Cancel</IonButton>)
-        : undefined;
+        : (<AddButton onChanges={handleRefresh} containingPage={pageRef.current} />);
 
     return (
         <StandardPage
             title="Bookmarks"
             ref={pageRef}
-            primaryButton={cancelSearchButton}
+            primaryButton={primaryHeaderButton}
             onPullToRefresh={handleRefresh}
             footer={footerToolbar}
         >
