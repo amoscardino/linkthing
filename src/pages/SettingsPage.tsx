@@ -71,7 +71,7 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
         >
             <IonList className="ion-padding-vertical" style={{ background: '' }}>
                 <IonListHeader>
-                    linkding Settings
+                    Linkding Settings
                 </IonListHeader>
 
                 <IonItem>
@@ -113,6 +113,10 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                         Your REST API token from Settings &gt; Integrations.
                     </IonNote>
                 </IonItem>
+
+                <IonListHeader className="ion-margin-top ion-padding-top">
+                    App Settings
+                </IonListHeader>
 
                 <IonItem>
                     <IonLabel>
