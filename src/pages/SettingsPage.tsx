@@ -1,4 +1,4 @@
-import { InputChangeEventDetail } from "@ionic/core";
+import { InputChangeEventDetail, ToggleChangeEventDetail } from "@ionic/core";
 import {
     IonButton,
     IonIcon,
@@ -7,7 +7,8 @@ import {
     IonLabel,
     IonList,
     IonListHeader,
-    IonNote
+    IonNote,
+    IonToggle
 } from "@ionic/react";
 import { checkmarkOutline, closeOutline } from "ionicons/icons";
 import StandardPage from "components/StandardPage";
@@ -45,6 +46,11 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
         setSettings(prev => ({ ...prev, token: evt.detail.value || '' } as Settings));
     };
 
+    const handleClipboardChange = (evt: CustomEvent<ToggleChangeEventDetail>) => {
+        const checked = evt.detail.checked;
+        setSettings(prev => ({ ...prev, disableClipboard: !checked } as Settings));
+    };
+
     const closeButton = (
         <IonButton onClick={handleCloseButton} title="Cancel">
             <IonIcon slot="icon-only" icon={closeOutline} />
@@ -65,7 +71,7 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
         >
             <IonList className="ion-padding-vertical" style={{ background: '' }}>
                 <IonListHeader>
-                    Linkding Settings
+                    linkding Settings
                 </IonListHeader>
 
                 <IonItem>
@@ -105,6 +111,22 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
 
                     <IonNote slot="helper">
                         Your REST API token from Settings &gt; Integrations.
+                    </IonNote>
+                </IonItem>
+
+                <IonItem>
+                    <IonLabel>
+                        Enable Clipboard Detection
+                    </IonLabel>
+
+                    <IonToggle
+                        slot="end"
+                        checked={!settings?.disableClipboard}
+                        onIonChange={handleClipboardChange}
+                    />
+
+                    <IonNote slot="helper">
+                        Enables or disable reading from the clipboard when creating bookmarks.
                     </IonNote>
                 </IonItem>
 

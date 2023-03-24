@@ -3,6 +3,7 @@ import Bookmark from "api/types/bookmark";
 import { createBookmark } from "api/linkdigApi";
 import { useQueryClient } from "@tanstack/react-query";
 import { Clipboard } from "@capacitor/clipboard";
+import useSettings from "./useSettings";
 
 interface UseNewBookmarkResult {
     bookmark: Bookmark;
@@ -12,6 +13,7 @@ interface UseNewBookmarkResult {
 
 const useNewBookmark = (): UseNewBookmarkResult => {
     const [bookmark, setBookmark] = useState({ unread: true } as Bookmark);
+    const { settings } = useSettings();
     const queryClient = useQueryClient();
 
     const saveBookmark = async (): Promise<void> => {
@@ -32,8 +34,9 @@ const useNewBookmark = (): UseNewBookmarkResult => {
             }
         };
 
-        tryLoadUrlFromClipboard();
-    }, []);
+        if (settings && !settings?.disableClipboard)
+            tryLoadUrlFromClipboard();
+    }, [settings, settings?.disableClipboard]);
 
     return {
         bookmark,

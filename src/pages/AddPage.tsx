@@ -30,7 +30,6 @@ const AddPage = ({ dismiss }: AddPageProps) => {
     };
 
     const handleSaveButton = async () => {
-        // TODO: Validate URL
         if (!bookmark.url || !bookmark.url.length || !bookmark.url.startsWith('http')) {
             await showToast({
                 header: 'Missing URL',
