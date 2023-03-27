@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from "react";
 import Bookmark from "api/types/bookmark";
-import { createBookmark } from "api/linkdigApi";
+import { checkUrl, createBookmark } from "api/linkdigApi";
 import { useQueryClient } from "@tanstack/react-query";
 import { Clipboard } from "@capacitor/clipboard";
 import useSettings from "./useSettings";
@@ -37,6 +37,20 @@ const useNewBookmark = (): UseNewBookmarkResult => {
         if (settings && !settings?.disableClipboard)
             tryLoadUrlFromClipboard();
     }, [settings, settings?.disableClipboard]);
+
+    useEffect(() => {
+        const loadMetadata = async () => {
+            var checkResults = await checkUrl(bookmark.url);
+
+            setBookmark(prev => ({
+                ...prev,
+                website_title: checkResults.metadata.title,
+                website_description: checkResults.metadata.description
+            }));
+        };
+
+        loadMetadata();
+    }, [bookmark.url]);
 
     return {
         bookmark,

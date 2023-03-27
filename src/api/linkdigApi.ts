@@ -1,6 +1,7 @@
 import { CapacitorHttp } from '@capacitor/core';
 import { getSettings } from "./settingsApi";
 import Bookmark from "./types/bookmark";
+import BookmarkCheckResult from './types/bookmarkCheckResult';
 import BookmarkResult from "./types/bookmarkResult";
 
 const PAGE_SIZE = 10;
@@ -60,6 +61,30 @@ const getBookmark = async (id: number): Promise<Bookmark> => {
         throw new Error('Unable to load bookmark');
 
     return response.data as Bookmark;
+};
+
+const checkUrl = async (urlToCheck: string): Promise<BookmarkCheckResult> => {
+    const settings = await getSettings();
+
+    if (settings.instanceUrl === undefined || settings.token === undefined)
+        throw new Error('Missing Linkdig settings. Please provide them from the Settings page.');
+
+    const url = new URL(`api/bookmarks/check/`, settings.instanceUrl);
+
+    const response = await CapacitorHttp.get({
+        url: url.toString(),
+        params: {
+            url: urlToCheck
+        },
+        headers: {
+            'Authorization': `Token ${settings.token}`
+        }
+    });
+
+    if (response.status !== 200)
+        throw new Error('Unable to check URL');
+
+    return response.data as BookmarkCheckResult;
 };
 
 const createBookmark = async (bookmark: Bookmark): Promise<void> => {
@@ -129,6 +154,7 @@ const updateBookmarkRead = async (id: number): Promise<void> => {
 export {
     getBookmarks,
     getBookmark,
+    checkUrl,
     createBookmark,
     updateBookmark,
     updateBookmarkRead

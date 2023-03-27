@@ -86,6 +86,7 @@ const AddPage = ({ dismiss }: AddPageProps) => {
                     <IonInput
                         value={bookmark.title}
                         onIonChange={e => setBookmark(prev => ({ ...prev, title: e.target.value || '' } as Bookmark))}
+                        placeholder={bookmark.website_title || ''}
                     />
 
                     <IonNote slot="helper" className="ion-margin-bottom">
