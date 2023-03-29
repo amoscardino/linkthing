@@ -70,6 +70,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
             header: 'Bookmark Updated',
             message: `This bookmark has been marked as ${unread ? 'read' : 'unread'}.`,
             icon: unread ? bookmarkOutline : bookmark,
+            color: "medium",
             duration: 3000,
             buttons: [{ text: 'Ok', handler: async () => dismissToast() }]
         });
@@ -81,7 +82,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
 
     const handleEditOptionClick = () => {
         showEditModal({
-            swipeToClose: true,
+            canDismiss: true,
             presentingElement: containingPage || undefined
         });
     };

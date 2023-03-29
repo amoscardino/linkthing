@@ -1,6 +1,7 @@
 import { CapacitorHttp } from '@capacitor/core';
 import { getSettings } from "./settingsApi";
 import Bookmark from "./types/bookmark";
+import BookmarkCheckResult from './types/bookmarkCheckResult';
 import BookmarkResult from "./types/bookmarkResult";
 
 const PAGE_SIZE = 10;
@@ -62,18 +63,46 @@ const getBookmark = async (id: number): Promise<Bookmark> => {
     return response.data as Bookmark;
 };
 
-const updateBookmarkRead = async (id: number): Promise<void> => {
+const checkUrl = async (urlToCheck: string): Promise<BookmarkCheckResult> => {
     const settings = await getSettings();
 
     if (settings.instanceUrl === undefined || settings.token === undefined)
         throw new Error('Missing Linkdig settings. Please provide them from the Settings page.');
 
-    const bookmark = await getBookmark(id);
-    const url = new URL(`api/bookmarks/${id}/`, settings.instanceUrl);
+    const url = new URL(`api/bookmarks/check/`, settings.instanceUrl);
 
-    await CapacitorHttp.patch({
+    const response = await CapacitorHttp.get({
         url: url.toString(),
-        data: { unread: !bookmark.unread },
+        params: {
+            url: urlToCheck
+        },
+        headers: {
+            'Authorization': `Token ${settings.token}`
+        }
+    });
+
+    if (response.status !== 200)
+        throw new Error('Unable to check URL');
+
+    return response.data as BookmarkCheckResult;
+};
+
+const createBookmark = async (bookmark: Bookmark): Promise<void> => {
+    const settings = await getSettings();
+
+    if (settings.instanceUrl === undefined || settings.token === undefined)
+        throw new Error('Missing Linkdig settings. Please provide them from the Settings page.');
+
+    const url = new URL(`api/bookmarks/`, settings.instanceUrl);
+
+    await CapacitorHttp.post({
+        url: url.toString(),
+        data: {
+            url: bookmark.url,
+            title: bookmark.title,
+            description: bookmark.description,
+            unread: bookmark.unread
+        },
         headers: {
             'Authorization': `Token ${settings.token}`,
             'Content-Type': 'application/json'
@@ -103,9 +132,30 @@ const updateBookmark = async (bookmark: Bookmark): Promise<void> => {
     });
 };
 
+const updateBookmarkRead = async (id: number): Promise<void> => {
+    const settings = await getSettings();
+
+    if (settings.instanceUrl === undefined || settings.token === undefined)
+        throw new Error('Missing Linkdig settings. Please provide them from the Settings page.');
+
+    const bookmark = await getBookmark(id);
+    const url = new URL(`api/bookmarks/${id}/`, settings.instanceUrl);
+
+    await CapacitorHttp.patch({
+        url: url.toString(),
+        data: { unread: !bookmark.unread },
+        headers: {
+            'Authorization': `Token ${settings.token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
 export {
     getBookmarks,
     getBookmark,
-    updateBookmarkRead,
-    updateBookmark
+    checkUrl,
+    createBookmark,
+    updateBookmark,
+    updateBookmarkRead
 };

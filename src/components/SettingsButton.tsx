@@ -19,7 +19,7 @@ const SettingsButton = ({ containingPage, onChanges }: SettingsButtonProps) => {
 
     const handleSettingsButtonClick = () => {
         showModal({
-            swipeToClose: true,
+            canDismiss: true,
             presentingElement: containingPage || undefined
         });
     };
