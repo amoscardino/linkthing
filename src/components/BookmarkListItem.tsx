@@ -1,17 +1,21 @@
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import {
+    IonContent,
     IonIcon,
     IonItem,
     IonItemOption,
     IonItemOptions,
     IonItemSliding,
     IonLabel,
+    IonList,
+    IonPopover,
     useIonModal,
     useIonToast
 } from "@ionic/react";
 import {
     bookmark,
     bookmarkOutline,
+    copyOutline,
     pencilOutline,
     shareOutline
 } from "ionicons/icons";
@@ -22,6 +26,7 @@ import EditPage from "pages/EditPage";
 import { tapMedium } from "utils/haptics";
 import { useQueryClient } from "@tanstack/react-query";
 import useBookmarkSharing from "hooks/useBookmarkSharing";
+import { Clipboard } from "@capacitor/clipboard";
 
 interface BookmarkListItemProps {
     id: number;
@@ -35,6 +40,7 @@ interface BookmarkListItemProps {
 }
 
 const BookmarkListItem = (props: BookmarkListItemProps) => {
+    const itemId = useId();
     const { id, title, description, url, unread, listRefresh, containingPage } = props;
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
     const { shareBookmark } = useBookmarkSharing();
@@ -42,7 +48,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
     const queryClient = useQueryClient();
     const domain = new URL(url).hostname.replace('www.', '');
 
-    const handleDismiss = async (anyChanges: boolean) => {
+    const handleEdiModalDismiss = async (anyChanges: boolean) => {
         if (anyChanges)
             await listRefresh();
 
@@ -50,10 +56,14 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
         await slidingRef.current?.close();
     };
 
-    const [showEditModal, dismissEditModal] = useIonModal(EditPage, { id, dismiss: handleDismiss });
+    const [showEditModal, dismissEditModal] = useIonModal(EditPage, { id, dismiss: handleEdiModalDismiss });
 
     const handleItemClick = async () => {
         await Browser.open({ url: url });
+    };
+
+    const handleCopyItemClick = async () => {
+        await Clipboard.write({ url });
     };
 
     const handleToggleReadOptionClick = async () => {
@@ -89,7 +99,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
 
     return (
         <IonItemSliding ref={slidingRef}>
-            <IonItem onClick={handleItemClick} button>
+            <IonItem button onClick={handleItemClick} id={itemId}>
                 <IonIcon
                     slot="start"
                     color={unread ? "primary" : "medium"}
@@ -153,6 +163,19 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
                     Edit
                 </IonItemOption>
             </IonItemOptions>
+
+            <IonPopover trigger={itemId} triggerAction="context-menu" arrow={false}>
+                <IonContent>
+                    <IonList lines="none">
+                        <IonItem button onClick={handleCopyItemClick} detail={false}>
+                            <IonIcon icon={copyOutline} slot="start" />
+                            <IonLabel>
+                                Copy URL
+                            </IonLabel>
+                        </IonItem>
+                    </IonList>
+                </IonContent>
+            </IonPopover>
         </IonItemSliding >
     );
 };
