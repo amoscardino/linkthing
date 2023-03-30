@@ -1,14 +1,11 @@
-import { useId, useRef } from "react";
+import { useRef } from "react";
 import {
-    IonContent,
     IonIcon,
     IonItem,
     IonItemOption,
     IonItemOptions,
     IonItemSliding,
     IonLabel,
-    IonList,
-    IonPopover,
     useIonModal,
     useIonToast
 } from "@ionic/react";
@@ -40,7 +37,6 @@ interface BookmarkListItemProps {
 }
 
 const BookmarkListItem = (props: BookmarkListItemProps) => {
-    const itemId = useId();
     const { id, title, description, url, unread, listRefresh, containingPage } = props;
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
     const { shareBookmark } = useBookmarkSharing();
@@ -62,10 +58,6 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
         await Browser.open({ url: url });
     };
 
-    const handleCopyItemClick = async () => {
-        await Clipboard.write({ url });
-    };
-
     const handleToggleReadOptionClick = async () => {
         await slidingRef.current?.close();
 
@@ -82,24 +74,34 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
             icon: unread ? bookmarkOutline : bookmark,
             color: "medium",
             duration: 3000,
-            buttons: [{ text: 'Ok', handler: async () => dismissToast() }]
+            buttons: [{
+                text: 'Ok',
+                handler: async () => dismissToast()
+            }]
         });
     };
 
+    const handleCopyOptionClick = async () => {
+        await Clipboard.write({ url });
+        await slidingRef.current?.close();
+    };
+
     const handleShareOptionClick = async () => {
+        await slidingRef.current?.close();
         await shareBookmark(url, title, description);
     };
 
-    const handleEditOptionClick = () => {
+    const handleEditOptionClick = async () => {
         showEditModal({
             canDismiss: true,
             presentingElement: containingPage || undefined
         });
+        await slidingRef.current?.close();
     };
 
     return (
         <IonItemSliding ref={slidingRef}>
-            <IonItem button onClick={handleItemClick} id={itemId}>
+            <IonItem button onClick={handleItemClick}>
                 <IonIcon
                     slot="start"
                     color={unread ? "primary" : "medium"}
@@ -148,6 +150,14 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
 
             <IonItemOptions side="end">
                 <IonItemOption
+                    color="medium"
+                    onClick={handleCopyOptionClick}
+                >
+                    <IonIcon slot="start" icon={copyOutline} />
+                    Copy
+                </IonItemOption>
+
+                <IonItemOption
                     color="tertiary"
                     onClick={handleShareOptionClick}
                 >
@@ -163,20 +173,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
                     Edit
                 </IonItemOption>
             </IonItemOptions>
-
-            <IonPopover trigger={itemId} triggerAction="context-menu" arrow={false}>
-                <IonContent>
-                    <IonList lines="none">
-                        <IonItem button onClick={handleCopyItemClick} detail={false}>
-                            <IonIcon icon={copyOutline} slot="start" />
-                            <IonLabel>
-                                Copy URL
-                            </IonLabel>
-                        </IonItem>
-                    </IonList>
-                </IonContent>
-            </IonPopover>
-        </IonItemSliding >
+        </IonItemSliding>
     );
 };
 
