@@ -7,12 +7,14 @@ import useSettings from "./useSettings";
 
 interface UseNewBookmarkResult {
     bookmark: Bookmark;
+    isExistingBookmark: boolean;
     setBookmark: (value: SetStateAction<Bookmark>) => void;
     saveBookmark: () => Promise<void>;
 }
 
 const useNewBookmark = (): UseNewBookmarkResult => {
     const [bookmark, setBookmark] = useState({ unread: true } as Bookmark);
+    const [isExistingBookmark, setIsExistingBookmark] = useState(false);
     const { settings } = useSettings();
     const queryClient = useQueryClient();
 
@@ -47,6 +49,8 @@ const useNewBookmark = (): UseNewBookmarkResult => {
                 website_title: checkResults.metadata.title,
                 website_description: checkResults.metadata.description
             }));
+
+            setIsExistingBookmark(!!(checkResults.bookmark?.id));
         };
 
         loadMetadata();
@@ -54,6 +58,7 @@ const useNewBookmark = (): UseNewBookmarkResult => {
 
     return {
         bookmark,
+        isExistingBookmark,
         setBookmark,
         saveBookmark
     };
