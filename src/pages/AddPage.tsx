@@ -22,7 +22,7 @@ interface AddPageProps {
 }
 
 const AddPage = ({ dismiss }: AddPageProps) => {
-    const { bookmark, setBookmark, saveBookmark } = useNewBookmark();
+    const { bookmark, isExistingBookmark, setBookmark, saveBookmark } = useNewBookmark();
     const [showToast, dismissToast] = useIonToast();
 
     const handleCloseButton = () => {
@@ -76,9 +76,16 @@ const AddPage = ({ dismiss }: AddPageProps) => {
                         value={bookmark.url}
                         onIonChange={e => setBookmark(prev => ({ ...prev, url: e.target.value || '' } as Bookmark))}
                     />
+
+                    {isExistingBookmark && (
+                        <IonNote slot="helper" color="warning">
+                            It looks like this URL matches an existing bookmark.
+                            If you save this URL again, it will update the older bookmark.
+                        </IonNote>
+                    )}
                 </IonItem>
 
-                <IonItem>
+                <IonItem className="ion-margin-bottom">
                     <IonLabel position="stacked">
                         Title
                     </IonLabel>
@@ -89,12 +96,12 @@ const AddPage = ({ dismiss }: AddPageProps) => {
                         placeholder={bookmark.website_title || ''}
                     />
 
-                    <IonNote slot="helper" className="ion-margin-bottom">
+                    <IonNote slot="helper">
                         Leave blank to use title scraped from website.
                     </IonNote>
                 </IonItem>
 
-                <IonItem>
+                <IonItem className="ion-margin-bottom">
                     <IonLabel position="stacked">
                         Description
                     </IonLabel>
@@ -107,7 +114,7 @@ const AddPage = ({ dismiss }: AddPageProps) => {
                         rows={4}
                     />
 
-                    <IonNote slot="helper" className="ion-margin-bottom">
+                    <IonNote slot="helper">
                         Leave blank to use description scraped from website.
                     </IonNote>
                 </IonItem>
