@@ -22,7 +22,7 @@ const useSettings = (): UseSettingsResult => {
         };
 
         loadSettings();
-    }, [])
+    }, []);
 
     const persistSettings = async (): Promise<void> => {
         const hasSettings = settings !== undefined && (settings.instanceUrl?.length || 0) > 0 && (settings.token?.length || 0) > 0;

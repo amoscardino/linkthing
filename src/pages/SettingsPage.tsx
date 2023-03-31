@@ -1,4 +1,4 @@
-import { InputChangeEventDetail, ToggleChangeEventDetail } from "@ionic/core";
+import { InputChangeEventDetail, SelectChangeEventDetail, ToggleChangeEventDetail } from "@ionic/core";
 import {
     IonButton,
     IonIcon,
@@ -8,6 +8,8 @@ import {
     IonList,
     IonListHeader,
     IonNote,
+    IonSelect,
+    IonSelectOption,
     IonToggle
 } from "@ionic/react";
 import { checkmarkOutline, closeOutline } from "ionicons/icons";
@@ -49,6 +51,10 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
     const handleClipboardChange = (evt: CustomEvent<ToggleChangeEventDetail>) => {
         const checked = evt.detail.checked;
         setSettings(prev => ({ ...prev, disableClipboard: !checked } as Settings));
+    };
+
+    const handleInitialViewModeChange = (evt: CustomEvent<SelectChangeEventDetail>) => {
+        setSettings(prev => ({ ...prev, initialViewMode: evt.detail.value || 'unread' } as Settings));
     };
 
     const closeButton = (
@@ -132,6 +138,21 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     <IonNote slot="helper">
                         Enables or disable reading from the clipboard when creating bookmarks.
                     </IonNote>
+                </IonItem>
+
+                <IonItem>
+                    <IonLabel>
+                        Initial View Mode
+                    </IonLabel>
+
+                    <IonSelect
+                        value={settings?.initialViewMode || 'unread'}
+                        onIonChange={handleInitialViewModeChange}
+                        interface="popover"
+                    >
+                        <IonSelectOption value="unread">Unread</IonSelectOption>
+                        <IonSelectOption value="all">All</IonSelectOption>
+                    </IonSelect>
                 </IonItem>
 
                 <IonListHeader className="ion-margin-top ion-padding-top">
