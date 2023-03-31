@@ -80,51 +80,39 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     Linkding Settings
                 </IonListHeader>
 
-                <IonItem>
-                    <IonLabel position="stacked">
-                        Instance URL
-                    </IonLabel>
-
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonInput
-                        name="instanceUrl"
+                        label="Instance URL"
+                        labelPlacement="stacked"
                         value={settings?.instanceUrl}
                         inputMode="url"
                         autocapitalize="off"
                         autocorrect="off"
                         autocomplete="off"
                         onIonChange={handleInstanceUrlChange}
+                        helperText="What URL you use to access Linkding. This should start with http or https."
                     />
-
-                    <IonNote slot="helper" className="ion-margin-bottom">
-                        What URL you use to access Linkdig. This should start with <code>http</code> or <code>https</code>.
-                    </IonNote>
                 </IonItem>
 
-                <IonItem>
-                    <IonLabel position="stacked">
-                        API Token
-                    </IonLabel>
-
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonInput
-                        name="token"
+                        label="API Token"
+                        labelPlacement="stacked"
                         value={settings?.token}
                         inputMode="url"
                         autocapitalize="off"
                         autocorrect="off"
                         autocomplete="off"
                         onIonChange={handleTokenChange}
+                        helperText="Your REST API token from Settings > Integrations."
                     />
-
-                    <IonNote slot="helper">
-                        Your REST API token from Settings &gt; Integrations.
-                    </IonNote>
                 </IonItem>
 
                 <IonListHeader className="ion-margin-top ion-padding-top">
                     App Settings
                 </IonListHeader>
 
-                <IonItem>
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonLabel>
                         Enable Clipboard Detection
                     </IonLabel>
@@ -140,12 +128,9 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     </IonNote>
                 </IonItem>
 
-                <IonItem>
-                    <IonLabel>
-                        Initial View Mode
-                    </IonLabel>
-
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonSelect
+                        label="Initial View Mode"
                         value={settings?.initialViewMode || 'unread'}
                         onIonChange={handleInitialViewModeChange}
                         interface="popover"

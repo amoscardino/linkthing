@@ -5,7 +5,6 @@ import {
     IonItem,
     IonLabel,
     IonList,
-    IonNote,
     IonTextarea,
     IonToggle,
     useIonToast
@@ -67,59 +66,53 @@ const AddPage = ({ dismiss }: AddPageProps) => {
         >
             <IonList className="ion-padding-vertical" style={{ background: '' }}>
                 <IonItem className="ion-margin-bottom">
-                    <IonLabel position="stacked">
-                        URL
-                    </IonLabel>
-
                     <IonInput
+                        label="URL"
+                        labelPlacement="stacked"
                         type="url"
                         value={bookmark.url}
                         onIonChange={e => setBookmark(prev => ({ ...prev, url: e.target.value || '' } as Bookmark))}
+                        errorText={isExistingBookmark ? "It looks like this URL matches an existing bookmark. If you save this URL again, it will update the older bookmark." : undefined}
                     />
-
-                    {isExistingBookmark && (
-                        <IonNote slot="helper" color="warning">
-                            It looks like this URL matches an existing bookmark.
-                            If you save this URL again, it will update the older bookmark.
-                        </IonNote>
-                    )}
                 </IonItem>
 
-                <IonItem className="ion-margin-bottom">
-                    <IonLabel position="stacked">
-                        Title
-                    </IonLabel>
+                <IonItem lines="none" className="ion-margin-bottom">
+                    <IonTextarea
+                        label="Tags"
+                        labelPlacement="stacked"
+                        value={bookmark.tag_names?.join(' ') || ''}
+                        onIonChange={e => setBookmark(prev => ({ ...prev, tag_names: (e.target.value || '').split(' ') } as Bookmark))}
+                        autoGrow
+                        rows={1}
+                        helperText="Separate with spaces. Do not prefix with #."
+                    />
+                </IonItem>
 
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonInput
+                        label="Title"
+                        labelPlacement="stacked"
                         value={bookmark.title}
                         onIonChange={e => setBookmark(prev => ({ ...prev, title: e.target.value || '' } as Bookmark))}
                         placeholder={bookmark.website_title || ''}
+                        helperText="Leave blank to use title scraped from website."
                     />
-
-                    <IonNote slot="helper">
-                        Leave blank to use title scraped from website.
-                    </IonNote>
                 </IonItem>
 
-                <IonItem className="ion-margin-bottom">
-                    <IonLabel position="stacked">
-                        Description
-                    </IonLabel>
-
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonTextarea
+                        label="Description"
+                        labelPlacement="stacked"
                         value={bookmark.description}
                         onIonChange={e => setBookmark(prev => ({ ...prev, description: e.target.value || '' } as Bookmark))}
                         placeholder={bookmark.website_description || ''}
                         autoGrow
                         rows={4}
+                        helperText="Leave blank to use description scraped from website."
                     />
-
-                    <IonNote slot="helper">
-                        Leave blank to use description scraped from website.
-                    </IonNote>
                 </IonItem>
 
-                <IonItem>
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonLabel>
                         Unread?
                     </IonLabel>
