@@ -101,7 +101,8 @@ const createBookmark = async (bookmark: Bookmark): Promise<void> => {
             url: bookmark.url,
             title: bookmark.title,
             description: bookmark.description,
-            unread: bookmark.unread
+            unread: bookmark.unread,
+            tag_names: bookmark.tag_names
         },
         headers: {
             'Authorization': `Token ${settings.token}`,
@@ -123,7 +124,8 @@ const updateBookmark = async (bookmark: Bookmark): Promise<void> => {
         data: {
             title: bookmark.title,
             description: bookmark.description,
-            unread: bookmark.unread
+            unread: bookmark.unread,
+            tag_names: bookmark.tag_names
         },
         headers: {
             'Authorization': `Token ${settings.token}`,

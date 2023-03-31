@@ -5,7 +5,6 @@ import {
     IonItem,
     IonLabel,
     IonList,
-    IonNote,
     IonTextarea,
     IonToggle
 } from "@ionic/react";
@@ -53,53 +52,53 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
             secondaryButton={closeButton}
         >
             <IonList className="ion-padding-vertical" style={{ background: '' }}>
-                <IonItem className="ion-margin-bottom">
-                    <IonLabel position="stacked">
-                        URL
-                    </IonLabel>
-
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonInput
+                        label="URL"
+                        labelPlacement="stacked"
                         name="url"
                         value={bookmark.url}
                         disabled
                     />
                 </IonItem>
 
-                <IonItem>
-                    <IonLabel position="stacked">
-                        Title
-                    </IonLabel>
+                <IonItem lines="none" className="ion-margin-bottom">
+                    <IonTextarea
+                        label="Tags"
+                        labelPlacement="stacked"
+                        value={bookmark.tag_names?.join(' ') || ''}
+                        onIonChange={e => setBookmark(prev => ({ ...prev, tag_names: (e.target.value || '').split(' ') } as Bookmark))}
+                        autoGrow
+                        rows={1}
+                        helperText="Separate with spaces. Do not prefix with #."
+                    />
+                </IonItem>
 
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonInput
+                        label="Title"
+                        labelPlacement="stacked"
                         value={bookmark.title}
                         onIonChange={e => setBookmark(prev => ({ ...prev, title: e.target.value || '' } as Bookmark))}
                         placeholder={bookmark.website_title || ''}
+                        helperText="Leave blank to use title scraped from website."
                     />
-
-                    <IonNote slot="helper" className="ion-margin-bottom">
-                        Leave blank to use title scraped from website.
-                    </IonNote>
                 </IonItem>
 
-                <IonItem>
-                    <IonLabel position="stacked">
-                        Description
-                    </IonLabel>
-
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonTextarea
+                        label="Description"
+                        labelPlacement="stacked"
                         value={bookmark.description}
                         onIonChange={e => setBookmark(prev => ({ ...prev, description: e.target.value || '' } as Bookmark))}
                         placeholder={bookmark.website_description || ''}
                         autoGrow
                         rows={4}
+                        helperText="Leave blank to use description scraped from website."
                     />
-
-                    <IonNote slot="helper" className="ion-margin-bottom">
-                        Leave blank to use description scraped from website.
-                    </IonNote>
                 </IonItem>
 
-                <IonItem>
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonLabel>
                         Unread?
                     </IonLabel>
