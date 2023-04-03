@@ -6,14 +6,17 @@ import {
     IonLabel,
     IonList,
     IonTextarea,
-    IonToggle
+    IonToggle,
+    useIonModal
 } from "@ionic/react";
-import { checkmarkOutline, closeOutline } from "ionicons/icons";
+import { checkmarkOutline, closeOutline, pricetagOutline } from "ionicons/icons";
 import StandardPage from "components/StandardPage";
 import { tapMedium } from "utils/haptics";
 import useBookmark from "hooks/useBookmark";
 import Bookmark from "api/types/bookmark";
 import Footer from "components/Footer";
+import { useRef } from "react";
+import TagsPage from "./TagsPage";
 
 interface EditPageProps {
     id: number;
@@ -22,6 +25,20 @@ interface EditPageProps {
 
 const EditPage = ({ id, dismiss }: EditPageProps) => {
     const { bookmark, setBookmark, saveBookmark } = useBookmark(id);
+    const pageRef = useRef<HTMLElement | null>(null);
+
+    const handleTagDismiss = (newTag: string | null) => {
+        if (newTag && !bookmark.tag_names?.includes(newTag)) {
+            setBookmark(prev => ({
+                ...prev,
+                tag_names: [...prev.tag_names || [], newTag]
+            }));
+        }
+
+        hideTagModal();
+    };
+
+    const [showTagModal, hideTagModal] = useIonModal(TagsPage, { dismiss: handleTagDismiss });
 
     const handleCloseButton = () => {
         dismiss(false);
@@ -47,6 +64,7 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
 
     return (
         <StandardPage
+            ref={pageRef}
             title="Edit Bookmark"
             primaryButton={saveButton}
             secondaryButton={closeButton}
@@ -63,14 +81,22 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
                 </IonItem>
 
                 <IonItem lines="none" className="ion-margin-bottom">
-                    <IonTextarea
+                    <IonInput
                         label="Tags"
                         labelPlacement="stacked"
                         value={bookmark.tag_names?.join(' ') || ''}
-                        onIonChange={e => setBookmark(prev => ({ ...prev, tag_names: (e.target.value || '').split(' ') } as Bookmark))}
-                        autoGrow
-                        rows={1}
+                        onIonChange={e => setBookmark(prev => ({ ...prev, tag_names: (e.target.value || '').toString().split(' ') } as Bookmark))}
                         helperText="Separate with spaces. Do not prefix with #."
+                    />
+
+                    <IonIcon
+                        slot="end"
+                        icon={pricetagOutline}
+                        color="primary"
+                        onClick={() => showTagModal({
+                            presentingElement: pageRef.current || undefined,
+                            canDismiss: true
+                        })}
                     />
                 </IonItem>
 
