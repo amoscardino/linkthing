@@ -22,6 +22,7 @@ import AddButton from "components/AddButton";
 import useBookmarks from "hooks/useBookmarks";
 import useViewMode from "hooks/useViewMode";
 import { ViewMode } from "types/viewMode";
+import TagsButton from "components/TagsButton";
 
 const ListPage = () => {
     const pageRef = useRef<HTMLElement | null>(null);
@@ -58,6 +59,15 @@ const ListPage = () => {
         await evt.target.complete();
     };
 
+    const handleTagChange = async (tag: string | null): Promise<void> => {
+        if (tag) {
+            setSearchQuery(`#${tag}`);
+            setShowSearch(true);
+        }
+        else
+            setShowSearch(false);
+    };
+
     const footerToolbar = !showSearch
         ? (
             <IonToolbar>
@@ -75,7 +85,7 @@ const ListPage = () => {
                 </IonSegment>
 
                 <IonButtons slot="start">
-                    <SettingsButton onChanges={handleRefresh} containingPage={pageRef.current} />
+                    <TagsButton onChanges={handleTagChange} containingPage={pageRef.current} />
                 </IonButtons>
 
                 <IonButtons slot="end">
@@ -91,11 +101,16 @@ const ListPage = () => {
         ? (<IonButton onClick={() => setShowSearch(false)}>Cancel</IonButton>)
         : (<AddButton onChanges={handleRefresh} containingPage={pageRef.current} />);
 
+    const secondaryHeaderButton = showSearch
+        ? (undefined)
+        : (<SettingsButton onChanges={handleRefresh} containingPage={pageRef.current} />);
+
     return (
         <StandardPage
             title="Bookmarks"
             ref={pageRef}
             primaryButton={primaryHeaderButton}
+            secondaryButton={secondaryHeaderButton}
             onPullToRefresh={handleRefresh}
             footer={footerToolbar}
         >

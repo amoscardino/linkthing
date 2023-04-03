@@ -153,11 +153,36 @@ const updateBookmarkRead = async (id: number): Promise<void> => {
     });
 };
 
+const getTags = async (): Promise<string[]> => {
+    const settings = await getSettings();
+
+    if (settings.instanceUrl === undefined || settings.token === undefined)
+        throw new Error('Missing Linkdig settings. Please provide them from the Settings page.');
+
+    const url = new URL(`api/tags/`, settings.instanceUrl);
+
+    const response = await CapacitorHttp.get({
+        url: url.toString(),
+        params: {
+            limit: '1000'
+        },
+        headers: {
+            'Authorization': `Token ${settings.token}`
+        }
+    });
+
+    if (response.status !== 200)
+        throw new Error('Unable to load tags');
+
+    return response.data?.results?.map((tag: { name: string }) => tag.name) || [];
+};
+
 export {
     getBookmarks,
     getBookmark,
     checkUrl,
     createBookmark,
     updateBookmark,
-    updateBookmarkRead
+    updateBookmarkRead,
+    getTags
 };
