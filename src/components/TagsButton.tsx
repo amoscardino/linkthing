@@ -8,8 +8,8 @@ interface TagsButtonProps {
 }
 
 const TagsButton = ({ containingPage, onChanges }: TagsButtonProps) => {
-    const handleDismiss = async (tag: string | null) => {
-        await onChanges(tag);
+    const handleDismiss = async (tags: string[] | null) => {
+        await onChanges(tags?.length ? tags[0] : null);
         dismissModal();
     };
 

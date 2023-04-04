@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
     IonButton,
     IonChip,
@@ -5,35 +6,60 @@ import {
     IonItem,
     IonLabel,
     IonList,
-    IonListHeader
+    IonNote
 } from "@ionic/react";
-import { closeOutline, pricetagOutline } from "ionicons/icons";
+import { checkmarkOutline, closeOutline, pricetagOutline } from "ionicons/icons";
 import StandardPage from "components/StandardPage";
 import Footer from "components/Footer";
 import QueryResultDisplay from "components/QueryResultDisplay";
-import { Fragment } from "react";
 import useGroupedTags from "hooks/useGroupedTags";
 
 interface TagsPageProps {
-    dismiss: (tag: string | null) => void;
+    dismiss: (tags: string[] | null) => void;
+    selected?: string[];
+    multipleSelection?: boolean;
 }
 
-const TagsPage = ({ dismiss }: TagsPageProps) => {
+const TagsPage = ({ dismiss, selected, multipleSelection }: TagsPageProps) => {
     const { groups, isSuccess, isLoading, isError } = useGroupedTags();
+    const [selectedTags, setSelectedTags] = useState([...selected || []]);
 
     const handleCloseButton = () => {
         dismiss(null);
     };
+
+    const handleSaveButton = () => {
+        dismiss([...selectedTags]);
+    };
+
+    const handleTagClick = (tag: string) => {
+        return () => {
+            if (multipleSelection) {
+                if (selectedTags.includes(tag))
+                    setSelectedTags(prev => prev.filter(x => x !== tag));
+                else
+                    setSelectedTags(prev => [...prev, tag]);
+            }
+            else
+                dismiss([tag]);
+        };
+    }
 
     const closeButton = (
         <IonButton onClick={handleCloseButton} title="Clear">
             <IonIcon slot="icon-only" icon={closeOutline} />
         </IonButton>
     );
+    const saveButton = (
+        <IonButton onClick={handleSaveButton} title="Clear">
+            <IonIcon slot="icon-only" icon={checkmarkOutline} />
+        </IonButton>
+    );
 
     return (
         <StandardPage
             title="Tags"
+            primaryButton={multipleSelection ? saveButton : undefined}
             secondaryButton={closeButton}
         >
             <QueryResultDisplay
@@ -46,22 +72,27 @@ const TagsPage = ({ dismiss }: TagsPageProps) => {
                     <>
                         <IonList className="ion-padding-vertical" style={{ background: '' }}>
                             {groups.map(group => (
-                                <Fragment key={group.name}>
-                                    <IonListHeader>
-                                        {group.name}
-                                    </IonListHeader>
+                                <IonItem key={group.name}>
+                                    <IonNote slot="start">{group.name}</IonNote>
 
-                                    <IonItem>
-                                        <div className="ion-padding-vertical">
-                                            {group.tags.map(tag => (
-                                                <IonChip key={tag} onClick={() => dismiss(tag)}>
-                                                    <IonIcon icon={pricetagOutline} />
+                                    <div className="ion-padding-vertical">
+                                        {group.tags.map(tag => {
+                                            const isSelected = selectedTags.includes(tag);
+
+                                            return (
+                                                <IonChip
+                                                    key={tag}
+                                                    onClick={handleTagClick(tag)}
+                                                    color={isSelected ? 'primary' : 'medium'}
+                                                    outline={true}
+                                                >
+                                                    <IonIcon icon={isSelected ? checkmarkOutline : pricetagOutline} />
                                                     <IonLabel>{tag}</IonLabel>
                                                 </IonChip>
-                                            ))}
-                                        </div>
-                                    </IonItem>
-                                </Fragment>
+                                            )
+                                        })}
+                                    </div>
+                                </IonItem>
                             ))}
 
                             <Footer />

@@ -28,18 +28,18 @@ const AddPage = ({ dismiss }: AddPageProps) => {
     const [showToast, dismissToast] = useIonToast();
     const pageRef = useRef<HTMLElement | null>(null);
 
-    const handleTagDismiss = (newTag: string | null) => {
-        if (newTag && !bookmark.tag_names?.includes(newTag)) {
-            setBookmark(prev => ({
-                ...prev,
-                tag_names: [...prev.tag_names || [], newTag]
-            }));
-        }
+    const handleTagDismiss = (newTags: string[] | null) => {
+        if (newTags !== null)
+            setBookmark(prev => ({ ...prev, tag_names: [...newTags] }));
 
         hideTagModal();
     };
 
-    const [showTagModal, hideTagModal] = useIonModal(TagsPage, { dismiss: handleTagDismiss });
+    const [showTagModal, hideTagModal] = useIonModal(TagsPage, {
+        dismiss: handleTagDismiss,
+        selected: bookmark.tag_names || [],
+        multipleSelection: true
+    });
 
     const handleCloseButton = () => {
         dismiss(false);
