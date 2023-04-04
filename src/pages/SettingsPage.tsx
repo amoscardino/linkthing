@@ -57,6 +57,10 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
         setSettings(prev => ({ ...prev, initialViewMode: evt.detail.value || 'unread' } as Settings));
     };
 
+    const handleBrowserModeChange = (evt: CustomEvent<SelectChangeEventDetail>) => {
+        setSettings(prev => ({ ...prev, browserMode: evt.detail.value || 'in-app' } as Settings));
+    };
+
     const closeButton = (
         <IonButton onClick={handleCloseButton} title="Cancel">
             <IonIcon slot="icon-only" icon={closeOutline} />
@@ -138,6 +142,22 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                         <IonSelectOption value="unread">Unread</IonSelectOption>
                         <IonSelectOption value="all">All</IonSelectOption>
                     </IonSelect>
+                </IonItem>
+
+                <IonItem lines="none" className="ion-margin-bottom">
+                    <IonSelect
+                        label="Browser"
+                        value={settings?.browserMode || 'in-app'}
+                        onIonChange={handleBrowserModeChange}
+                        interface="popover"
+                    >
+                        <IonSelectOption value="in-app">In-App Browser</IonSelectOption>
+                        <IonSelectOption value="external">External Browser</IonSelectOption>
+                    </IonSelect>
+
+                    <IonNote slot="helper">
+                        This will only apply after the app is restarted.
+                    </IonNote>
                 </IonItem>
 
                 <IonListHeader className="ion-margin-top ion-padding-top">
