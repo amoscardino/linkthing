@@ -132,7 +132,7 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     </IonNote>
                 </IonItem>
 
-                <IonItem lines="none" className="ion-margin-bottom">
+                <IonItem lines="none">
                     <IonSelect
                         label="Initial View Mode"
                         value={settings?.initialViewMode || 'unread'}
@@ -144,7 +144,7 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     </IonSelect>
                 </IonItem>
 
-                <IonItem lines="none" className="ion-margin-bottom">
+                <IonItem lines="none">
                     <IonSelect
                         label="Browser"
                         value={settings?.browserMode || 'in-app'}
@@ -154,10 +154,6 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                         <IonSelectOption value="in-app">In-App Browser</IonSelectOption>
                         <IonSelectOption value="external">External Browser</IonSelectOption>
                     </IonSelect>
-
-                    <IonNote slot="helper">
-                        This will only apply after the app is restarted.
-                    </IonNote>
                 </IonItem>
 
                 <IonListHeader className="ion-margin-top ion-padding-top">

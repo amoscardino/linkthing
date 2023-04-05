@@ -24,7 +24,8 @@ import { tapMedium } from "utils/haptics";
 import { useQueryClient } from "@tanstack/react-query";
 import useBookmarkSharing from "hooks/useBookmarkSharing";
 import { Clipboard } from "@capacitor/clipboard";
-import useSettings from "hooks/useSettings";
+import { useRecoilValue } from "recoil";
+import browserSettingAtom from "state/browserSettingState";
 
 interface BookmarkListItemProps {
     id: number;
@@ -40,7 +41,7 @@ interface BookmarkListItemProps {
 const BookmarkListItem = (props: BookmarkListItemProps) => {
     const { id, title, description, url, unread, listRefresh, containingPage } = props;
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
-    const { settings } = useSettings();
+    const browserMode = useRecoilValue(browserSettingAtom);
     const { shareBookmark } = useBookmarkSharing();
     const [showToast, dismissToast] = useIonToast();
     const queryClient = useQueryClient();
@@ -97,7 +98,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
         await slidingRef.current?.close();
     };
 
-    const itemProps = settings?.browserMode === 'external'
+    const itemProps = browserMode === 'external'
         ? { href: url, target: "_blank" }
         : { button: true, onClick: async () => { await Browser.open({ url }) } }
 

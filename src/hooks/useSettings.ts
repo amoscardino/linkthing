@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Settings } from "api/types/settings";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRecoilState } from "recoil";
-import hasSettingsAtom from "state/settingsState";
+import hasSettingsAtom from "state/hasSettingsState";
 import { getSettings, saveSettings } from "api/settingsApi";
+import browserSettingAtom from "state/browserSettingState";
 
 interface UseSettingsResult {
     settings?: Settings;
@@ -13,6 +14,7 @@ interface UseSettingsResult {
 
 const useSettings = (): UseSettingsResult => {
     const [, setHasSettings] = useRecoilState(hasSettingsAtom);
+    const [, setBrowserSettings] = useRecoilState(browserSettingAtom);
     const [settings, setSettings] = useState<Settings | undefined>(undefined);
     const queryClient = useQueryClient();
 
@@ -28,6 +30,7 @@ const useSettings = (): UseSettingsResult => {
         const hasSettings = settings !== undefined && (settings.instanceUrl?.length || 0) > 0 && (settings.token?.length || 0) > 0;
 
         setHasSettings(hasSettings);
+        setBrowserSettings(settings?.browserMode || null);
         await saveSettings(settings);
 
         if (hasSettings)
