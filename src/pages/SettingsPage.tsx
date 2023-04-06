@@ -116,6 +116,30 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     App Settings
                 </IonListHeader>
 
+                <IonItem>
+                    <IonSelect
+                        label="Browser"
+                        value={settings?.browserMode || 'in-app'}
+                        onIonChange={handleBrowserModeChange}
+                        interface="popover"
+                    >
+                        <IonSelectOption value="in-app">In-App Browser</IonSelectOption>
+                        <IonSelectOption value="external">External Browser</IonSelectOption>
+                    </IonSelect>
+                </IonItem>
+
+                <IonItem>
+                    <IonSelect
+                        label="Initial View Mode"
+                        value={settings?.initialViewMode || 'unread'}
+                        onIonChange={handleInitialViewModeChange}
+                        interface="popover"
+                    >
+                        <IonSelectOption value="unread">Unread</IonSelectOption>
+                        <IonSelectOption value="all">All</IonSelectOption>
+                    </IonSelect>
+                </IonItem>
+
                 <IonItem lines="none" className="ion-margin-bottom">
                     <IonLabel>
                         Enable Clipboard Detection
@@ -130,30 +154,6 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     <IonNote slot="helper">
                         Enables or disable reading from the clipboard when creating bookmarks.
                     </IonNote>
-                </IonItem>
-
-                <IonItem lines="none">
-                    <IonSelect
-                        label="Initial View Mode"
-                        value={settings?.initialViewMode || 'unread'}
-                        onIonChange={handleInitialViewModeChange}
-                        interface="popover"
-                    >
-                        <IonSelectOption value="unread">Unread</IonSelectOption>
-                        <IonSelectOption value="all">All</IonSelectOption>
-                    </IonSelect>
-                </IonItem>
-
-                <IonItem lines="none">
-                    <IonSelect
-                        label="Browser"
-                        value={settings?.browserMode || 'in-app'}
-                        onIonChange={handleBrowserModeChange}
-                        interface="popover"
-                    >
-                        <IonSelectOption value="in-app">In-App Browser</IonSelectOption>
-                        <IonSelectOption value="external">External Browser</IonSelectOption>
-                    </IonSelect>
                 </IonItem>
 
                 <IonListHeader className="ion-margin-top ion-padding-top">

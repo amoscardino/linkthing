@@ -8,11 +8,17 @@ import {
     IonList,
     IonNote
 } from "@ionic/react";
-import { checkmarkOutline, closeOutline, pricetagOutline } from "ionicons/icons";
+import {
+    checkmarkCircle,
+    checkmarkOutline,
+    closeOutline,
+    pricetagOutline
+} from "ionicons/icons";
 import StandardPage from "components/StandardPage";
 import Footer from "components/Footer";
 import QueryResultDisplay from "components/QueryResultDisplay";
 import useGroupedTags from "hooks/useGroupedTags";
+import useDarkMode from "hooks/useDarkMode";
 
 interface TagsPageProps {
     dismiss: (tags: string[] | null) => void;
@@ -23,6 +29,7 @@ interface TagsPageProps {
 const TagsPage = ({ dismiss, selected, multipleSelection }: TagsPageProps) => {
     const { groups, isSuccess, isLoading, isError } = useGroupedTags();
     const [selectedTags, setSelectedTags] = useState([...selected || []]);
+    const isDarkMode = useDarkMode();
 
     const handleCloseButton = () => {
         dismiss(null);
@@ -84,9 +91,9 @@ const TagsPage = ({ dismiss, selected, multipleSelection }: TagsPageProps) => {
                                                     key={tag}
                                                     onClick={handleTagClick(tag)}
                                                     color={isSelected ? 'primary' : 'medium'}
-                                                    outline={true}
+                                                    outline={!isDarkMode}
                                                 >
-                                                    <IonIcon icon={isSelected ? checkmarkOutline : pricetagOutline} />
+                                                    <IonIcon icon={isSelected ? checkmarkCircle : pricetagOutline} />
                                                     <IonLabel>{tag}</IonLabel>
                                                 </IonChip>
                                             )
