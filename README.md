@@ -1,6 +1,8 @@
 # linkthing
 
-A client app for [linkding](https://github.com/sissbruecker/linkding/) built with [Ionic](https://ionicframework.com).
+An iOS client for [linkding](https://github.com/sissbruecker/linkding/) built with [Ionic](https://ionicframework.com).
+
+[Download from the App Store](https://apps.apple.com/us/app/linkthing/id1666031776)
 
 ## Requirements
 
