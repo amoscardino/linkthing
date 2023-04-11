@@ -5,10 +5,16 @@ const getSettings = async (): Promise<Settings> => {
     const instanceUrl = (await Preferences.get({ key: 'instanceUrl' })).value;
     const token = (await Preferences.get({ key: 'token' })).value;
     const disableClipboard = (await Preferences.get({ key: 'disableClipboard' })).value;
+    const initialViewMode = (await Preferences.get({ key: 'initialViewMode' })).value;
+    const browserMode = (await Preferences.get({ key: 'browserMode' })).value;
 
-    const settings = { instanceUrl, token, disableClipboard: disableClipboard?.length } as Settings;
-
-    return settings;
+    return {
+        instanceUrl,
+        token,
+        disableClipboard: disableClipboard?.length,
+        initialViewMode: initialViewMode || 'unread',
+        browserMode: browserMode || 'in-app'
+    } as Settings;
 };
 
 const saveSettings = async (settings?: Settings): Promise<void> => {
@@ -18,6 +24,8 @@ const saveSettings = async (settings?: Settings): Promise<void> => {
     await Preferences.set({ key: 'instanceUrl', value: settings.instanceUrl || '' });
     await Preferences.set({ key: 'token', value: settings.token || '' });
     await Preferences.set({ key: 'disableClipboard', value: settings.disableClipboard ? 'true' : '' });
+    await Preferences.set({ key: 'initialViewMode', value: settings.initialViewMode?.toString() || '' });
+    await Preferences.set({ key: 'browserMode', value: settings.browserMode?.toString() || '' });
 };
 
 export {

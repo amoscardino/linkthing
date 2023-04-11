@@ -12,6 +12,7 @@ import {
 import {
     bookmark,
     bookmarkOutline,
+    copyOutline,
     pencilOutline,
     shareOutline
 } from "ionicons/icons";
@@ -22,6 +23,9 @@ import EditPage from "pages/EditPage";
 import { tapMedium } from "utils/haptics";
 import { useQueryClient } from "@tanstack/react-query";
 import useBookmarkSharing from "hooks/useBookmarkSharing";
+import { Clipboard } from "@capacitor/clipboard";
+import { useRecoilValue } from "recoil";
+import browserSettingAtom from "state/browserSettingState";
 
 interface BookmarkListItemProps {
     id: number;
@@ -37,12 +41,13 @@ interface BookmarkListItemProps {
 const BookmarkListItem = (props: BookmarkListItemProps) => {
     const { id, title, description, url, unread, listRefresh, containingPage } = props;
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
+    const browserMode = useRecoilValue(browserSettingAtom);
     const { shareBookmark } = useBookmarkSharing();
     const [showToast, dismissToast] = useIonToast();
     const queryClient = useQueryClient();
     const domain = new URL(url).hostname.replace('www.', '');
 
-    const handleDismiss = async (anyChanges: boolean) => {
+    const handleEdiModalDismiss = async (anyChanges: boolean) => {
         if (anyChanges)
             await listRefresh();
 
@@ -50,11 +55,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
         await slidingRef.current?.close();
     };
 
-    const [showEditModal, dismissEditModal] = useIonModal(EditPage, { id, dismiss: handleDismiss });
-
-    const handleItemClick = async () => {
-        await Browser.open({ url: url });
-    };
+    const [showEditModal, dismissEditModal] = useIonModal(EditPage, { id, dismiss: handleEdiModalDismiss });
 
     const handleToggleReadOptionClick = async () => {
         await slidingRef.current?.close();
@@ -72,24 +73,38 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
             icon: unread ? bookmarkOutline : bookmark,
             color: "medium",
             duration: 3000,
-            buttons: [{ text: 'Ok', handler: async () => dismissToast() }]
+            buttons: [{
+                text: 'Ok',
+                handler: async () => dismissToast()
+            }]
         });
     };
 
+    const handleCopyOptionClick = async () => {
+        await Clipboard.write({ url });
+        await slidingRef.current?.close();
+    };
+
     const handleShareOptionClick = async () => {
+        await slidingRef.current?.close();
         await shareBookmark(url, title, description);
     };
 
-    const handleEditOptionClick = () => {
+    const handleEditOptionClick = async () => {
         showEditModal({
             canDismiss: true,
             presentingElement: containingPage || undefined
         });
+        await slidingRef.current?.close();
     };
+
+    const itemProps = browserMode === 'external'
+        ? { href: url, target: "_blank" }
+        : { button: true, onClick: async () => { await Browser.open({ url }) } }
 
     return (
         <IonItemSliding ref={slidingRef}>
-            <IonItem onClick={handleItemClick} button>
+            <IonItem {...itemProps}>
                 <IonIcon
                     slot="start"
                     color={unread ? "primary" : "medium"}
@@ -138,6 +153,14 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
 
             <IonItemOptions side="end">
                 <IonItemOption
+                    color="medium"
+                    onClick={handleCopyOptionClick}
+                >
+                    <IonIcon slot="start" icon={copyOutline} />
+                    Copy
+                </IonItemOption>
+
+                <IonItemOption
                     color="tertiary"
                     onClick={handleShareOptionClick}
                 >
@@ -153,7 +176,7 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
                     Edit
                 </IonItemOption>
             </IonItemOptions>
-        </IonItemSliding >
+        </IonItemSliding>
     );
 };
 

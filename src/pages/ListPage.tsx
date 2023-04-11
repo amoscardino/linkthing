@@ -20,22 +20,26 @@ import StandardPage from "components/StandardPage";
 import Footer from "components/Footer";
 import AddButton from "components/AddButton";
 import useBookmarks from "hooks/useBookmarks";
+import useViewMode from "hooks/useViewMode";
+import { ViewMode } from "types/viewMode";
+import TagsButton from "components/TagsButton";
 
 const ListPage = () => {
     const pageRef = useRef<HTMLElement | null>(null);
     const searchbarRef = useRef<HTMLIonSearchbarElement | null>(null);
-    const [unreadOnly, setUnreadOnly] = useState<boolean>(true);
+    const { viewMode, setViewMode } = useViewMode();
     const [showSearch, setShowSearch] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const {
         bookmarks,
+        enabled,
         isSuccess,
         isLoading,
         isError,
         refresh,
         canLoadMore,
         loadMore
-    } = useBookmarks(showSearch, unreadOnly, searchQuery);
+    } = useBookmarks(showSearch, viewMode, searchQuery);
 
     useEffect(() => {
         const timeoutId = setTimeout(async () => {
@@ -55,12 +59,21 @@ const ListPage = () => {
         await evt.target.complete();
     };
 
+    const handleTagChange = async (tag: string | null): Promise<void> => {
+        if (tag) {
+            setSearchQuery(`#${tag}`);
+            setShowSearch(true);
+        }
+        else
+            setShowSearch(false);
+    };
+
     const footerToolbar = !showSearch
         ? (
             <IonToolbar>
                 <IonSegment
-                    value={unreadOnly ? 'unread' : 'all'}
-                    onIonChange={(e) => setUnreadOnly((e.detail.value || 'unread') === 'unread')}
+                    value={viewMode?.toString()}
+                    onIonChange={(e) => setViewMode((e.detail.value || 'unread') as ViewMode)}
                     style={{ minWidth: '60%' }}
                 >
                     <IonSegmentButton value="unread">
@@ -72,7 +85,7 @@ const ListPage = () => {
                 </IonSegment>
 
                 <IonButtons slot="start">
-                    <SettingsButton onChanges={handleRefresh} containingPage={pageRef.current} />
+                    <TagsButton onChanges={handleTagChange} containingPage={pageRef.current} />
                 </IonButtons>
 
                 <IonButtons slot="end">
@@ -88,11 +101,16 @@ const ListPage = () => {
         ? (<IonButton onClick={() => setShowSearch(false)}>Cancel</IonButton>)
         : (<AddButton onChanges={handleRefresh} containingPage={pageRef.current} />);
 
+    const secondaryHeaderButton = showSearch
+        ? (undefined)
+        : (<SettingsButton onChanges={handleRefresh} containingPage={pageRef.current} />);
+
     return (
         <StandardPage
             title="Bookmarks"
             ref={pageRef}
             primaryButton={primaryHeaderButton}
+            secondaryButton={secondaryHeaderButton}
             onPullToRefresh={handleRefresh}
             footer={footerToolbar}
         >
@@ -107,7 +125,7 @@ const ListPage = () => {
 
             <QueryResultDisplay
                 isSuccess={isSuccess}
-                isLoading={isLoading}
+                isLoading={!enabled || isLoading}
                 isError={isError}
                 isEmpty={!bookmarks?.length}
                 successRender={() => (

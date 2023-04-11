@@ -2,7 +2,7 @@ import { IonApp, setupIonicReact } from '@ionic/react';
 import { useRecoilValue } from 'recoil';
 import ListPage from 'pages/ListPage';
 import SetupPage from 'pages/SetupPage';
-import hasSettingsAtom from 'state/settingsState';
+import hasSettingsAtom from 'state/hasSettingsState';
 import Loader from 'components/Loader';
 
 import '@ionic/react/css/core.css';

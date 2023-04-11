@@ -1,6 +1,7 @@
 import { QueryResult } from "../types/results";
 import EmptyMessage from "./EmptyMessage";
 import ErrorMessage from "./ErrorMessage";
+import FullWidthColumn from "./FullWidthColumn";
 import Loader from "./Loader";
 import StandardColumn from "./StandardColumn";
 
@@ -19,6 +20,8 @@ interface QueryResultDisplayProps extends QueryResult {
      * wrapped in an `EmptyMessage` component.
      */
     emptyRender?: () => JSX.Element | string;
+
+    fullWidth?: boolean;
 }
 
 const QueryResultDisplay = (props: QueryResultDisplayProps): JSX.Element | null => {
@@ -34,7 +37,9 @@ const QueryResultDisplay = (props: QueryResultDisplayProps): JSX.Element | null 
     if ((props.isEmpty || false) && props.emptyRender !== undefined)
         return <EmptyMessage>{props.emptyRender()}</EmptyMessage>;
 
-    return <StandardColumn>{props.successRender()}</StandardColumn>;
+    return props.fullWidth
+        ? <FullWidthColumn>{props.successRender()}</FullWidthColumn>
+        : <StandardColumn>{props.successRender()}</StandardColumn>;
 };
 
 export default QueryResultDisplay;

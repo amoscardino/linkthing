@@ -5,17 +5,19 @@ import {
     IonItem,
     IonLabel,
     IonList,
-    IonNote,
     IonTextarea,
     IonToggle,
+    useIonModal,
     useIonToast
 } from "@ionic/react";
-import { alertOutline, checkmarkOutline, closeOutline } from "ionicons/icons";
+import { alertOutline, checkmarkOutline, closeOutline, pricetagOutline } from "ionicons/icons";
 import StandardPage from "components/StandardPage";
 import { tapMedium } from "utils/haptics";
 import Bookmark from "api/types/bookmark";
 import Footer from "components/Footer";
 import useNewBookmark from "hooks/useNewBookmark";
+import TagsPage from "./TagsPage";
+import { useRef } from "react";
 
 interface AddPageProps {
     dismiss: (anyChanges: boolean) => void;
@@ -24,6 +26,20 @@ interface AddPageProps {
 const AddPage = ({ dismiss }: AddPageProps) => {
     const { bookmark, isExistingBookmark, setBookmark, saveBookmark } = useNewBookmark();
     const [showToast, dismissToast] = useIonToast();
+    const pageRef = useRef<HTMLElement | null>(null);
+
+    const handleTagDismiss = (newTags: string[] | null) => {
+        if (newTags !== null)
+            setBookmark(prev => ({ ...prev, tag_names: [...newTags] }));
+
+        hideTagModal();
+    };
+
+    const [showTagModal, hideTagModal] = useIonModal(TagsPage, {
+        dismiss: handleTagDismiss,
+        selected: bookmark.tag_names || [],
+        multipleSelection: true
+    });
 
     const handleCloseButton = () => {
         dismiss(false);
@@ -61,65 +77,68 @@ const AddPage = ({ dismiss }: AddPageProps) => {
 
     return (
         <StandardPage
+            ref={pageRef}
             title="Add Bookmark"
             primaryButton={saveButton}
             secondaryButton={closeButton}
         >
             <IonList className="ion-padding-vertical" style={{ background: '' }}>
                 <IonItem className="ion-margin-bottom">
-                    <IonLabel position="stacked">
-                        URL
-                    </IonLabel>
-
                     <IonInput
+                        label="URL"
+                        labelPlacement="stacked"
                         type="url"
                         value={bookmark.url}
                         onIonChange={e => setBookmark(prev => ({ ...prev, url: e.target.value || '' } as Bookmark))}
+                        errorText={isExistingBookmark ? "It looks like this URL matches an existing bookmark. If you save this URL again, it will update the older bookmark." : undefined}
                     />
-
-                    {isExistingBookmark && (
-                        <IonNote slot="helper" color="warning">
-                            It looks like this URL matches an existing bookmark.
-                            If you save this URL again, it will update the older bookmark.
-                        </IonNote>
-                    )}
                 </IonItem>
 
-                <IonItem className="ion-margin-bottom">
-                    <IonLabel position="stacked">
-                        Title
-                    </IonLabel>
-
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonInput
+                        label="Tags"
+                        labelPlacement="stacked"
+                        value={bookmark.tag_names?.join(' ') || ''}
+                        onIonChange={e => setBookmark(prev => ({ ...prev, tag_names: (e.target.value || '').toString().split(' ') } as Bookmark))}
+                        helperText="Separate with spaces. Do not prefix with #."
+                    />
+
+                    <IonIcon
+                        slot="end"
+                        icon={pricetagOutline}
+                        color="primary"
+                        onClick={() => showTagModal({
+                            presentingElement: pageRef.current || undefined,
+                            canDismiss: true
+                        })}
+                    />
+                </IonItem>
+
+                <IonItem lines="none" className="ion-margin-bottom">
+                    <IonInput
+                        label="Title"
+                        labelPlacement="stacked"
                         value={bookmark.title}
                         onIonChange={e => setBookmark(prev => ({ ...prev, title: e.target.value || '' } as Bookmark))}
                         placeholder={bookmark.website_title || ''}
+                        helperText="Leave blank to use title scraped from website."
                     />
-
-                    <IonNote slot="helper">
-                        Leave blank to use title scraped from website.
-                    </IonNote>
                 </IonItem>
 
-                <IonItem className="ion-margin-bottom">
-                    <IonLabel position="stacked">
-                        Description
-                    </IonLabel>
-
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonTextarea
+                        label="Description"
+                        labelPlacement="stacked"
                         value={bookmark.description}
                         onIonChange={e => setBookmark(prev => ({ ...prev, description: e.target.value || '' } as Bookmark))}
                         placeholder={bookmark.website_description || ''}
                         autoGrow
                         rows={4}
+                        helperText="Leave blank to use description scraped from website."
                     />
-
-                    <IonNote slot="helper">
-                        Leave blank to use description scraped from website.
-                    </IonNote>
                 </IonItem>
 
-                <IonItem>
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonLabel>
                         Unread?
                     </IonLabel>

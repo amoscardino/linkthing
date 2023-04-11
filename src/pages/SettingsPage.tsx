@@ -1,4 +1,4 @@
-import { InputChangeEventDetail, ToggleChangeEventDetail } from "@ionic/core";
+import { InputChangeEventDetail, SelectChangeEventDetail, ToggleChangeEventDetail } from "@ionic/core";
 import {
     IonButton,
     IonIcon,
@@ -8,6 +8,8 @@ import {
     IonList,
     IonListHeader,
     IonNote,
+    IonSelect,
+    IonSelectOption,
     IonToggle
 } from "@ionic/react";
 import { checkmarkOutline, closeOutline } from "ionicons/icons";
@@ -51,6 +53,14 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
         setSettings(prev => ({ ...prev, disableClipboard: !checked } as Settings));
     };
 
+    const handleInitialViewModeChange = (evt: CustomEvent<SelectChangeEventDetail>) => {
+        setSettings(prev => ({ ...prev, initialViewMode: evt.detail.value || 'unread' } as Settings));
+    };
+
+    const handleBrowserModeChange = (evt: CustomEvent<SelectChangeEventDetail>) => {
+        setSettings(prev => ({ ...prev, browserMode: evt.detail.value || 'in-app' } as Settings));
+    };
+
     const closeButton = (
         <IonButton onClick={handleCloseButton} title="Cancel">
             <IonIcon slot="icon-only" icon={closeOutline} />
@@ -74,44 +84,32 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     Linkding Settings
                 </IonListHeader>
 
-                <IonItem>
-                    <IonLabel position="stacked">
-                        Instance URL
-                    </IonLabel>
-
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonInput
-                        name="instanceUrl"
+                        label="Instance URL"
+                        labelPlacement="stacked"
                         value={settings?.instanceUrl}
                         inputMode="url"
                         autocapitalize="off"
                         autocorrect="off"
                         autocomplete="off"
                         onIonChange={handleInstanceUrlChange}
+                        helperText="What URL you use to access Linkding. This should start with http or https."
                     />
-
-                    <IonNote slot="helper" className="ion-margin-bottom">
-                        What URL you use to access Linkdig. This should start with <code>http</code> or <code>https</code>.
-                    </IonNote>
                 </IonItem>
 
-                <IonItem>
-                    <IonLabel position="stacked">
-                        API Token
-                    </IonLabel>
-
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonInput
-                        name="token"
+                        label="API Token"
+                        labelPlacement="stacked"
                         value={settings?.token}
                         inputMode="url"
                         autocapitalize="off"
                         autocorrect="off"
                         autocomplete="off"
                         onIonChange={handleTokenChange}
+                        helperText="Your REST API token from Settings > Integrations."
                     />
-
-                    <IonNote slot="helper">
-                        Your REST API token from Settings &gt; Integrations.
-                    </IonNote>
                 </IonItem>
 
                 <IonListHeader className="ion-margin-top ion-padding-top">
@@ -119,6 +117,30 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                 </IonListHeader>
 
                 <IonItem>
+                    <IonSelect
+                        label="Browser"
+                        value={settings?.browserMode || 'in-app'}
+                        onIonChange={handleBrowserModeChange}
+                        interface="popover"
+                    >
+                        <IonSelectOption value="in-app">In-App Browser</IonSelectOption>
+                        <IonSelectOption value="external">External Browser</IonSelectOption>
+                    </IonSelect>
+                </IonItem>
+
+                <IonItem>
+                    <IonSelect
+                        label="Initial View Mode"
+                        value={settings?.initialViewMode || 'unread'}
+                        onIonChange={handleInitialViewModeChange}
+                        interface="popover"
+                    >
+                        <IonSelectOption value="unread">Unread</IonSelectOption>
+                        <IonSelectOption value="all">All</IonSelectOption>
+                    </IonSelect>
+                </IonItem>
+
+                <IonItem lines="none" className="ion-margin-bottom">
                     <IonLabel>
                         Enable Clipboard Detection
                     </IonLabel>

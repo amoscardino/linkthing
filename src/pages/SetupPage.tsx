@@ -9,9 +9,7 @@ import {
     IonImg,
     IonInput,
     IonItem,
-    IonLabel,
-    IonList,
-    IonNote
+    IonList
 } from "@ionic/react";
 import StandardPage from "components/StandardPage";
 import { tapMedium } from "utils/haptics";
@@ -60,32 +58,24 @@ const SetupPage = () => {
                     </IonCardContent>
 
                     <IonList>
-                        <IonItem>
-                            <IonLabel position="stacked">
-                                Instance URL
-                            </IonLabel>
-
+                        <IonItem lines="none" className="ion-padding-bottom">
                             <IonInput
-                                name="instanceUrl"
+                                label="Instance URL"
+                                labelPlacement="stacked"
                                 value={settings?.instanceUrl}
                                 inputMode="url"
                                 autocapitalize="off"
                                 autocorrect="off"
                                 autocomplete="off"
                                 onIonChange={handleInstanceUrlChange}
+                                helperText="What URL you use to access Linkding. This should start with http or https."
                             />
-
-                            <IonNote slot="helper" className="ion-margin-bottom">
-                                What URL you use to access Linkdig. This should start with <code>http</code> or <code>https</code>.
-                            </IonNote>
                         </IonItem>
 
-                        <IonItem>
-                            <IonLabel position="stacked">
-                                API Token
-                            </IonLabel>
-
+                        <IonItem lines="none" className="ion-padding-bottom">
                             <IonInput
+                                label="API Token"
+                                labelPlacement="stacked"
                                 name="token"
                                 value={settings?.token}
                                 inputMode="url"
@@ -93,15 +83,12 @@ const SetupPage = () => {
                                 autocorrect="off"
                                 autocomplete="off"
                                 onIonChange={handleTokenChange}
+                                helperText="Your REST API token from Settings > Integrations."
                             />
-
-                            <IonNote slot="helper">
-                                Your REST API token from Settings &gt; Integrations.
-                            </IonNote>
                         </IonItem>
                     </IonList>
 
-                    <div className="ion-margin-top ion-padding ion-text-center">
+                    <div className="ion-padding ion-text-center">
                         <IonButton
                             expand="block"
                             shape="round"

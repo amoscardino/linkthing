@@ -9,7 +9,7 @@ export default interface Bookmark {
     is_archived: boolean;
     unread: boolean;
     shared: boolean;
-    tag_names: any[];
+    tag_names?: string[];
     date_added: string;
     date_modified: string | null;
 }
