@@ -14,7 +14,7 @@ const useGroupedTags = (): UseGroupedTagsResult => {
     const { tags, isSuccess, isLoading, isError } = useTags();
 
     const groups = tags.reduce((groups: TagGroup[], tag: string) => {
-        const groupName = /[A-Z]/i.test(tag[0]) ? tag[0].toUpperCase() : '0-9';
+        const groupName = /[A-Z]/i.test(tag[0]) ? tag[0].toUpperCase() : '#';
         const existingGroups = groups.filter(g => g.name === groupName);
 
         if (!existingGroups.length)
