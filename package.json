@@ -1,66 +1,65 @@
 {
-    "name": "link-thing",
-    "version": "1.2.1",
-    "private": true,
-    "dependencies": {
-        "@capacitor/android": "4.6.1",
-        "@capacitor/app": "4.1.1",
-        "@capacitor/browser": "^4.1.1",
-        "@capacitor/clipboard": "^4.1.0",
-        "@capacitor/core": "4.6.3",
-        "@capacitor/haptics": "4.1.0",
-        "@capacitor/ios": "4.6.3",
-        "@capacitor/keyboard": "4.1.1",
-        "@capacitor/preferences": "^4.0.2",
-        "@capacitor/share": "^4.1.1",
-        "@capacitor/status-bar": "4.1.1",
-        "@ionic/react": "^7.0.0",
-        "@ionic/react-router": "^7.0.0",
-        "@tanstack/react-query": "^4.24.4",
-        "@types/node": "^12.19.15",
-        "@types/react": "^18.0.17",
-        "@types/react-dom": "^18.0.6",
-        "@types/react-router": "^5.1.11",
-        "@types/react-router-dom": "^5.1.7",
-        "date-fns": "^2.29.3",
-        "history": "^4.9.0",
-        "ionicons": "^6.0.3",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "react-router": "^5.2.0",
-        "react-router-dom": "^5.2.0",
-        "react-scripts": "^5.0.0",
-        "recoil": "^0.7.6",
-        "typescript": "^4.1.3"
-    },
-    "scripts": {
-        "serve": "ionic serve",
-        "local-cors-proxy": "lcp --proxyUrl 'http://linkding.me' --proxyPartial ''",
-        "build": "ionic build",
-        "ios:build": "ionic cap sync ios",
-        "ios:run": "ionic cap run ios -l",
-        "ios:open": "ionic cap open ios"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "@capacitor/assets": "^2.0.4",
-        "@capacitor/cli": "4.6.1",
-        "local-cors-proxy": "^1.1.0"
-    }
+  "name": "link-thing",
+  "version": "1.2.2",
+  "private": true,
+  "dependencies": {
+    "@capacitor/app": "^5.0.0",
+    "@capacitor/browser": "^5.0.0",
+    "@capacitor/clipboard": "^5.0.0",
+    "@capacitor/core": "^5.0.0",
+    "@capacitor/haptics": "^5.0.0",
+    "@capacitor/ios": "^5.0.0",
+    "@capacitor/keyboard": "^5.0.0",
+    "@capacitor/preferences": "^5.0.0",
+    "@capacitor/share": "^5.0.0",
+    "@capacitor/status-bar": "^5.0.0",
+    "@ionic/react": "^7.0.6",
+    "@ionic/react-router": "^7.0.6",
+    "@tanstack/react-query": "^4.24.4",
+    "@types/node": "^12.19.15",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@types/react-router": "^5.1.11",
+    "@types/react-router-dom": "^5.1.7",
+    "date-fns": "^2.29.3",
+    "history": "^4.9.0",
+    "ionicons": "^6.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^5.0.0",
+    "recoil": "^0.7.6",
+    "typescript": "^4.1.3"
+  },
+  "scripts": {
+    "serve": "ionic serve",
+    "local-cors-proxy": "lcp --proxyUrl 'http://linkding.me' --proxyPartial ''",
+    "build": "ionic build",
+    "ios:build": "ionic cap sync ios",
+    "ios:run": "ionic cap run ios -l",
+    "ios:open": "ionic cap open ios"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^2.0.4",
+    "@capacitor/cli": "^5.0.0",
+    "local-cors-proxy": "^1.1.0"
+  }
 }
