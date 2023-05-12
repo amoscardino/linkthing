@@ -85,7 +85,7 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
                         label="Tags"
                         labelPlacement="stacked"
                         value={bookmark.tag_names?.join(' ') || ''}
-                        onIonChange={e => setBookmark(prev => ({ ...prev, tag_names: (e.target.value || '').toString().split(' ') } as Bookmark))}
+                        onIonInput={e => setBookmark(prev => ({ ...prev, tag_names: (e.target.value || '').toString().split(' ') } as Bookmark))}
                         helperText="Separate with spaces. Do not prefix with #."
                     />
 
@@ -105,7 +105,7 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
                         label="Title"
                         labelPlacement="stacked"
                         value={bookmark.title}
-                        onIonChange={e => setBookmark(prev => ({ ...prev, title: e.target.value || '' } as Bookmark))}
+                        onIonInput={e => setBookmark(prev => ({ ...prev, title: e.target.value || '' } as Bookmark))}
                         placeholder={bookmark.website_title || ''}
                         helperText="Leave blank to use title scraped from website."
                     />
@@ -116,7 +116,7 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
                         label="Description"
                         labelPlacement="stacked"
                         value={bookmark.description}
-                        onIonChange={e => setBookmark(prev => ({ ...prev, description: e.target.value || '' } as Bookmark))}
+                        onIonInput={e => setBookmark(prev => ({ ...prev, description: e.target.value || '' } as Bookmark))}
                         placeholder={bookmark.website_description || ''}
                         autoGrow
                         rows={4}

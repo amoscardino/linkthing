@@ -67,7 +67,7 @@ const SetupPage = () => {
                                 autocapitalize="off"
                                 autocorrect="off"
                                 autocomplete="off"
-                                onIonChange={handleInstanceUrlChange}
+                                onIonInput={handleInstanceUrlChange}
                                 helperText="What URL you use to access Linkding. This should start with http or https."
                             />
                         </IonItem>
@@ -82,7 +82,7 @@ const SetupPage = () => {
                                 autocapitalize="off"
                                 autocorrect="off"
                                 autocomplete="off"
-                                onIonChange={handleTokenChange}
+                                onIonInput={handleTokenChange}
                                 helperText="Your REST API token from Settings > Integrations."
                             />
                         </IonItem>
