@@ -34,7 +34,7 @@
   },
   "scripts": {
     "serve": "ionic serve",
-    "local-cors-proxy": "lcp --proxyUrl 'http://linkding.me' --proxyPartial ''",
+    "local-cors-proxy": "lcp --proxyUrl 'https://linkding.moscardino.synology.me' --proxyPartial ''",
     "build": "ionic build",
     "ios:build": "ionic cap sync ios",
     "ios:run": "ionic cap run ios -l",
