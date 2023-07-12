@@ -153,6 +153,23 @@ const updateBookmarkRead = async (id: number): Promise<void> => {
     });
 };
 
+const deleteBookmark = async (id: number): Promise<void> => {
+    const settings = await getSettings();
+
+    if (settings.instanceUrl === undefined || settings.token === undefined)
+        throw new Error('Missing Linkdig settings. Please provide them from the Settings page.');
+    
+    const url = new URL(`api/bookmarks/${id}/`, settings.instanceUrl);
+    
+    await CapacitorHttp.delete({
+        url: url.toString(),
+        headers: {
+            'Authorization': `Token ${settings.token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
 const getTags = async (): Promise<string[]> => {
     const settings = await getSettings();
 
@@ -184,5 +201,6 @@ export {
     createBookmark,
     updateBookmark,
     updateBookmarkRead,
+    deleteBookmark,
     getTags
 };
