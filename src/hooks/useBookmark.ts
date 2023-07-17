@@ -1,12 +1,13 @@
 import { SetStateAction, useEffect, useState } from "react";
 import Bookmark from "api/types/bookmark";
-import { getBookmark, updateBookmark } from "api/linkdigApi";
+import { deleteBookmark, getBookmark, updateBookmark } from "api/linkdigApi";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface UseBookmarkResult {
     bookmark: Bookmark;
     setBookmark: (value: SetStateAction<Bookmark>) => void;
     saveBookmark: () => Promise<void>;
+    removeBookmark: () => Promise<void>;
 }
 
 const useBookmark = (id: number): UseBookmarkResult => {
@@ -27,10 +28,16 @@ const useBookmark = (id: number): UseBookmarkResult => {
         await queryClient.invalidateQueries();
     };
 
+    const removeBookmark = async (): Promise<void> => {
+        await deleteBookmark(bookmark.id);
+        await queryClient.invalidateQueries();
+    };
+
     return {
         bookmark,
         setBookmark,
-        saveBookmark
+        saveBookmark,
+        removeBookmark
     };
 };
 

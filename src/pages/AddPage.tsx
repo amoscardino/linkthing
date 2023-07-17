@@ -83,14 +83,14 @@ const AddPage = ({ dismiss }: AddPageProps) => {
             secondaryButton={closeButton}
         >
             <IonList className="ion-padding-vertical" style={{ background: '' }}>
-                <IonItem className="ion-margin-bottom">
+                <IonItem className="ion-margin-bottom" lines={isExistingBookmark ? "none" : undefined}>
                     <IonInput
                         label="URL"
                         labelPlacement="stacked"
                         type="url"
                         value={bookmark.url}
                         onIonInput={e => setBookmark(prev => ({ ...prev, url: e.target.value || '' } as Bookmark))}
-                        errorText={isExistingBookmark ? "It looks like this URL matches an existing bookmark. If you save this URL again, it will update the older bookmark." : undefined}
+                        helperText={isExistingBookmark ? "It looks like this URL matches an existing bookmark. If you save this URL again, it will update the older bookmark." : undefined}
                     />
                 </IonItem>
 

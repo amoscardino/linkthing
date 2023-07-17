@@ -7,11 +7,12 @@ import {
     IonList,
     IonTextarea,
     IonToggle,
+    useIonAlert,
     useIonModal
 } from "@ionic/react";
-import { checkmarkOutline, closeOutline, pricetagOutline } from "ionicons/icons";
+import { checkmarkOutline, closeOutline, pricetagOutline, trashOutline } from "ionicons/icons";
 import StandardPage from "components/StandardPage";
-import { tapMedium } from "utils/haptics";
+import { tapHeavy, tapMedium } from "utils/haptics";
 import useBookmark from "hooks/useBookmark";
 import Bookmark from "api/types/bookmark";
 import Footer from "components/Footer";
@@ -24,8 +25,9 @@ interface EditPageProps {
 }
 
 const EditPage = ({ id, dismiss }: EditPageProps) => {
-    const { bookmark, setBookmark, saveBookmark } = useBookmark(id);
+    const { bookmark, setBookmark, saveBookmark, removeBookmark } = useBookmark(id);
     const pageRef = useRef<HTMLElement | null>(null);
+    const [showDeleteAlert] = useIonAlert();
 
     const handleTagDismiss = (newTags: string[] | null) => {
         if (newTags !== null)
@@ -48,6 +50,25 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
         await saveBookmark();
         await tapMedium();
         dismiss(true);
+    };
+
+    const handleDeleteButton = async () => {
+        await showDeleteAlert({
+            header: "Delete Bookmark?",
+            message: "Are you sure you want to delete this bookmark? This is a permanent action.",
+            buttons: [{
+                text: 'Cancel',
+                role: 'cancel'
+            }, {
+                text: "Delete",
+                role: "destructive",
+                handler: async () => {
+                    await removeBookmark();
+                    await tapHeavy();
+                    dismiss(true);
+                }
+            }]
+        })
     };
 
     const closeButton = (
@@ -124,7 +145,7 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
                     />
                 </IonItem>
 
-                <IonItem lines="none" className="ion-margin-bottom">
+                <IonItem className="ion-margin-bottom">
                     <IonLabel>
                         Unread?
                     </IonLabel>
@@ -134,6 +155,20 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
                         checked={bookmark.unread}
                         onIonChange={e => setBookmark(prev => ({ ...prev, unread: e.target.checked } as Bookmark))}
                     />
+                </IonItem>
+
+                <IonItem className="ion-margin-top" lines="none">
+                    <IonLabel className="ion-margin-top ion-padding-top ion-text-center">
+                        <IonButton
+                            shape="round"
+                            color="danger"
+                            size="small"
+                            onClick={handleDeleteButton}
+                        >
+                            <IonIcon slot="start" icon={trashOutline} />
+                            Delete
+                        </IonButton>
+                    </IonLabel>
                 </IonItem>
 
                 <Footer />
