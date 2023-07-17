@@ -57,6 +57,10 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
         setSettings(prev => ({ ...prev, initialViewMode: evt.detail.value || 'unread' } as Settings));
     };
 
+    const handleListItemModeChange = (evt: CustomEvent<SelectChangeEventDetail>) => {
+        setSettings(prev => ({ ...prev, listItemMode: evt.detail.value || 'default' } as Settings));
+    };
+
     const handleBrowserModeChange = (evt: CustomEvent<SelectChangeEventDetail>) => {
         setSettings(prev => ({ ...prev, browserMode: evt.detail.value || 'in-app' } as Settings));
     };
@@ -137,6 +141,18 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     >
                         <IonSelectOption value="unread">Unread</IonSelectOption>
                         <IonSelectOption value="all">All</IonSelectOption>
+                    </IonSelect>
+                </IonItem>
+
+                <IonItem>
+                    <IonSelect
+                        label="List Item Display"
+                        value={settings?.listItemMode || 'unread'}
+                        onIonChange={handleListItemModeChange}
+                        interface="popover"
+                    >
+                        <IonSelectOption value="default">Description</IonSelectOption>
+                        <IonSelectOption value="tags">Tags</IonSelectOption>
                     </IonSelect>
                 </IonItem>
 

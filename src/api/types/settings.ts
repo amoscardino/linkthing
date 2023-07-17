@@ -1,4 +1,5 @@
 import { BrowserMode } from "types/browserMode";
+import { ItemMode } from "types/itemMode";
 import { ViewMode } from "types/viewMode";
 
 export interface Settings {
@@ -6,5 +7,6 @@ export interface Settings {
     token?: string;
     disableClipboard?: boolean;
     initialViewMode?: ViewMode;
+    listItemMode?: ItemMode;
     browserMode?: BrowserMode;
 }

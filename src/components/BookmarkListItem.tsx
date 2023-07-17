@@ -26,12 +26,15 @@ import useBookmarkSharing from "hooks/useBookmarkSharing";
 import { Clipboard } from "@capacitor/clipboard";
 import { useRecoilValue } from "recoil";
 import browserSettingAtom from "state/browserSettingState";
+import Tag from "./Tag";
+import listItemSettingAtom from "state/listItemSettingState";
 
 interface BookmarkListItemProps {
     id: number;
     url: string;
     title: string;
     description: string | null;
+    tags: string[];
     unread: boolean;
     dateAdded: string;
     listRefresh: () => Promise<void>;
@@ -39,9 +42,10 @@ interface BookmarkListItemProps {
 }
 
 const BookmarkListItem = (props: BookmarkListItemProps) => {
-    const { id, title, description, url, unread, listRefresh, containingPage } = props;
+    const { id, title, description, tags, url, unread, listRefresh, containingPage } = props;
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
     const browserMode = useRecoilValue(browserSettingAtom);
+    const listItemMode = useRecoilValue(listItemSettingAtom);
     const { shareBookmark } = useBookmarkSharing();
     const [showToast, dismissToast] = useIonToast();
     const queryClient = useQueryClient();
@@ -104,11 +108,12 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
 
     return (
         <IonItemSliding ref={slidingRef}>
-            <IonItem {...itemProps}>
+            <IonItem {...itemProps} className="item-top-align">
                 <IonIcon
                     slot="start"
                     color={unread ? "primary" : "medium"}
                     icon={unread ? bookmark : bookmarkOutline}
+                    className="ion-margin-top"
                 />
 
                 <IonLabel className="ion-text-wrap">
@@ -116,17 +121,40 @@ const BookmarkListItem = (props: BookmarkListItemProps) => {
                         {title}
                     </h2>
 
-                    {!!description && (
-                        <p className="two-line-truncate">
-                            {description}
-                        </p>
-                    )}
+                    {listItemMode === 'tags'
+                        ? (
+                            <>
+                                <p>
+                                    {format(parseISO(props.dateAdded), 'MMM d, yyyy')} — {domain}
+                                </p>
 
-                    <p>
-                        <small>
-                            {format(parseISO(props.dateAdded), 'MMM d, yyyy')} — {domain}
-                        </small>
-                    </p>
+                                <p>
+                                    {(tags || []).map(tag => (
+                                        <Tag
+                                            key={tag}
+                                            tag={tag}
+                                        />
+                                    ))}
+                                </p>
+                            </>
+                        )
+                        : (
+                            <>
+                                {!!description && (
+                                    <p className="two-line-truncate">
+                                        {description}
+                                    </p>
+                                )}
+
+                                <p>
+                                    <small>
+                                        {format(parseISO(props.dateAdded), 'MMM d, yyyy')} — {domain}
+                                    </small>
+                                </p>
+                            </>
+                        )
+                    }
+
                 </IonLabel>
             </IonItem>
 

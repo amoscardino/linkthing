@@ -6,6 +6,7 @@ const getSettings = async (): Promise<Settings> => {
     const token = (await Preferences.get({ key: 'token' })).value;
     const disableClipboard = (await Preferences.get({ key: 'disableClipboard' })).value;
     const initialViewMode = (await Preferences.get({ key: 'initialViewMode' })).value;
+    const listItemMode = (await Preferences.get({ key: 'listItemMode' })).value;
     const browserMode = (await Preferences.get({ key: 'browserMode' })).value;
 
     return {
@@ -13,6 +14,7 @@ const getSettings = async (): Promise<Settings> => {
         token,
         disableClipboard: disableClipboard?.length,
         initialViewMode: initialViewMode || 'unread',
+        listItemMode: listItemMode || 'default',
         browserMode: browserMode || 'in-app'
     } as Settings;
 };
@@ -25,6 +27,7 @@ const saveSettings = async (settings?: Settings): Promise<void> => {
     await Preferences.set({ key: 'token', value: settings.token || '' });
     await Preferences.set({ key: 'disableClipboard', value: settings.disableClipboard ? 'true' : '' });
     await Preferences.set({ key: 'initialViewMode', value: settings.initialViewMode?.toString() || '' });
+    await Preferences.set({ key: 'listItemMode', value: settings.listItemMode?.toString() || '' });
     await Preferences.set({ key: 'browserMode', value: settings.browserMode?.toString() || '' });
 };
 

@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import hasSettingsAtom from "state/hasSettingsState";
 import { getSettings, saveSettings } from "api/settingsApi";
 import browserSettingAtom from "state/browserSettingState";
+import listItemSettingAtom from "state/listItemSettingState";
 
 interface UseSettingsResult {
     settings?: Settings;
@@ -15,6 +16,7 @@ interface UseSettingsResult {
 const useSettings = (): UseSettingsResult => {
     const [, setHasSettings] = useRecoilState(hasSettingsAtom);
     const [, setBrowserSettings] = useRecoilState(browserSettingAtom);
+    const [, setListItemSettings] = useRecoilState(listItemSettingAtom);
     const [settings, setSettings] = useState<Settings | undefined>(undefined);
     const queryClient = useQueryClient();
 
@@ -31,6 +33,7 @@ const useSettings = (): UseSettingsResult => {
 
         setHasSettings(hasSettings);
         setBrowserSettings(settings?.browserMode || null);
+        setListItemSettings(settings?.listItemMode || null);
         await saveSettings(settings);
 
         if (hasSettings)

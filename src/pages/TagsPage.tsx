@@ -1,24 +1,20 @@
 import { useState } from "react";
 import {
     IonButton,
-    IonChip,
     IonIcon,
     IonItem,
-    IonLabel,
     IonList,
     IonNote
 } from "@ionic/react";
 import {
-    checkmarkCircle,
     checkmarkOutline,
-    closeOutline,
-    pricetagOutline
+    closeOutline
 } from "ionicons/icons";
 import StandardPage from "components/StandardPage";
 import Footer from "components/Footer";
 import QueryResultDisplay from "components/QueryResultDisplay";
 import useGroupedTags from "hooks/useGroupedTags";
-import useDarkMode from "hooks/useDarkMode";
+import Tag from "components/Tag";
 
 interface TagsPageProps {
     dismiss: (tags: string[] | null) => void;
@@ -29,7 +25,6 @@ interface TagsPageProps {
 const TagsPage = ({ dismiss, selected, multipleSelection }: TagsPageProps) => {
     const { groups, isSuccess, isLoading, isError } = useGroupedTags();
     const [selectedTags, setSelectedTags] = useState([...selected || []]);
-    const isDarkMode = useDarkMode();
 
     const handleCloseButton = () => {
         dismiss(null);
@@ -83,21 +78,14 @@ const TagsPage = ({ dismiss, selected, multipleSelection }: TagsPageProps) => {
                                     <IonNote slot="start">{group.name}</IonNote>
 
                                     <div className="ion-padding-vertical">
-                                        {group.tags.map(tag => {
-                                            const isSelected = selectedTags.includes(tag);
-
-                                            return (
-                                                <IonChip
-                                                    key={tag}
-                                                    onClick={handleTagClick(tag)}
-                                                    color={isSelected ? 'primary' : 'medium'}
-                                                    outline={!isDarkMode}
-                                                >
-                                                    <IonIcon icon={isSelected ? checkmarkCircle : pricetagOutline} />
-                                                    <IonLabel>{tag}</IonLabel>
-                                                </IonChip>
-                                            )
-                                        })}
+                                        {group.tags.map(tag => (
+                                            <Tag
+                                                key={tag}
+                                                tag={tag}
+                                                isActive={selectedTags.includes(tag)}
+                                                onClick={handleTagClick(tag)}
+                                            />
+                                        ))}
                                     </div>
                                 </IonItem>
                             ))}
