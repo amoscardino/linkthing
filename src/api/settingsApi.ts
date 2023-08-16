@@ -1,6 +1,10 @@
 import { Preferences } from '@capacitor/preferences';
 import { Settings } from './types/settings';
 
+/**
+ * Gets the settings from device preferences.
+ * @returns The settings from device preferences.
+ */
 const getSettings = async (): Promise<Settings> => {
     const instanceUrl = (await Preferences.get({ key: 'instanceUrl' })).value;
     const token = (await Preferences.get({ key: 'token' })).value;
@@ -19,6 +23,11 @@ const getSettings = async (): Promise<Settings> => {
     } as Settings;
 };
 
+/**
+ * Saves the settings to device preferences.
+ * @param settings The settings to save.
+ * @returns A promise that resolves when the settings have been saved.
+ */
 const saveSettings = async (settings?: Settings): Promise<void> => {
     if (!settings)
         return;

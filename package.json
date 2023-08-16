@@ -3,7 +3,7 @@
   "version": "1.4.0",
   "private": true,
   "dependencies": {
-    "@capacitor/app": "^5.0.0",
+    "@capacitor/app": "^5.0.6",
     "@capacitor/browser": "^5.0.0",
     "@capacitor/clipboard": "^5.0.0",
     "@capacitor/core": "^5.0.0",
@@ -34,7 +34,7 @@
   },
   "scripts": {
     "serve": "ionic serve",
-    "local-cors-proxy": "lcp --proxyUrl 'https://linkding.moscardino.synology.me' --proxyPartial ''",
+    "local-cors-proxy": "lcp --proxyUrl 'http://satellite-5.local:5090' --proxyPartial ''",
     "build": "ionic build",
     "ios:build": "ionic cap sync ios",
     "ios:run": "ionic cap run ios -l",

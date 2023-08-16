@@ -49,5 +49,16 @@
         </array>
         <key>ITSAppUsesNonExemptEncryption</key>
         <false />
+        <key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleURLName</key>
+                <string>com.getcapacitor.capacitor</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>linkthing</string>
+                </array>
+            </dict>
+        </array>
     </dict>
 </plist>
