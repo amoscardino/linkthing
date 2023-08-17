@@ -18,7 +18,7 @@ const getSettings = async (): Promise<Settings> => {
         token,
         disableClipboard: disableClipboard?.length,
         initialViewMode: initialViewMode || 'unread',
-        listItemMode: listItemMode || 'default',
+        listItemMode: listItemMode || 'description',
         browserMode: browserMode || 'in-app'
     } as Settings;
 };

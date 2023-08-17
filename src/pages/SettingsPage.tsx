@@ -58,7 +58,7 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
     };
 
     const handleListItemModeChange = (evt: CustomEvent<SelectChangeEventDetail>) => {
-        setSettings(prev => ({ ...prev, listItemMode: evt.detail.value || 'default' } as Settings));
+        setSettings(prev => ({ ...prev, listItemMode: evt.detail.value || 'description' } as Settings));
     };
 
     const handleBrowserModeChange = (evt: CustomEvent<SelectChangeEventDetail>) => {
@@ -147,12 +147,13 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                 <IonItem>
                     <IonSelect
                         label="List Item Display"
-                        value={settings?.listItemMode || 'unread'}
+                        value={settings?.listItemMode || 'description'}
                         onIonChange={handleListItemModeChange}
                         interface="popover"
                     >
-                        <IonSelectOption value="default">Description</IonSelectOption>
+                        <IonSelectOption value="description">Description</IonSelectOption>
                         <IonSelectOption value="tags">Tags</IonSelectOption>
+                        <IonSelectOption value="both">Both</IonSelectOption>
                     </IonSelect>
                 </IonItem>
 

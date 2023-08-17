@@ -19,6 +19,7 @@ import ToggleReadOption from "components/BookmarkListItemOptions/ToggleReadOptio
 import CopyOption from "components/BookmarkListItemOptions/CopyOption";
 import ShareOption from "components/BookmarkListItemOptions/ShareOption";
 import EditOption from "components/BookmarkListItemOptions/EditOption";
+import Tag from "./Tag";
 
 interface BookmarkListItemProps {
     bookmark: Bookmark;
@@ -30,9 +31,9 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
     const browserMode = useRecoilValue(browserSettingAtom);
     const listItemMode = useRecoilValue(listItemSettingAtom);
-    const description = listItemMode === 'tags'
-        ? (bookmark.tag_names || []).map(tag => `#${tag}`).join(' ')
-        : getBookmarkDescription(bookmark);
+    const description = getBookmarkDescription(bookmark);
+    const showDescription = (listItemMode === 'description' || listItemMode === 'both') && description.length > 0;
+    const showTags = (listItemMode === 'tags' || listItemMode === 'both') && (bookmark.tag_names || []).length > 0;
 
     const itemProps = browserMode === 'external'
         ? { href: bookmark.url, target: "_blank" }
@@ -53,7 +54,15 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
                         {getBookmarkTitle(bookmark)}
                     </h2>
 
-                    {description.length > 0 && (
+                    {showTags && (
+                        <p>
+                            {(bookmark.tag_names || []).map(tag => (
+                                <Tag key={tag} tag={tag} />
+                            ))}
+                        </p>
+                    )}
+
+                    {showDescription && (
                         <p className="two-line-truncate">
                             {description}
                         </p>

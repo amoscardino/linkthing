@@ -33,7 +33,7 @@ const useSettings = (): UseSettingsResult => {
 
         setHasSettings(hasSettings);
         setBrowserSettings(settings?.browserMode || null);
-        setListItemSettings(settings?.listItemMode || null);
+        setListItemSettings(settings?.listItemMode || 'description');
         await saveSettings(settings);
 
         if (hasSettings)

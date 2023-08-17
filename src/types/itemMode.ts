@@ -1,2 +1,2 @@
 
-export type ItemMode = 'default' | 'tags' | null;
+export type ItemMode = 'description' | 'tags' | 'both';

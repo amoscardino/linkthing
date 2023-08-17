@@ -4,12 +4,12 @@ import { ItemMode } from "types/itemMode";
 
 const listItemSettingAtom = atom<ItemMode>({
     key: 'list-item-mode-setting',
-    default: null,
+    default: 'description',
     effects: [({ setSelf, trigger }) => {
         const loadSettings = async () => {
             const settings = await getSettings();
 
-            setSelf(settings.listItemMode || null);
+            setSelf(settings.listItemMode || 'description');
         };
 
         if (trigger === 'get')
