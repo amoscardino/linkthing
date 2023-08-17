@@ -62,7 +62,7 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
                     <p>
                         <small>
                             {format(parseISO(bookmark.date_added), 'MMM d, yyyy')}
-                            <span>—</span>
+                            <span> — </span>
                             {getDomain(bookmark.url)}
                         </small>
                     </p>

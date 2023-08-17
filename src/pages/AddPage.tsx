@@ -20,11 +20,12 @@ import TagsPage from "./TagsPage";
 import { useRef } from "react";
 
 interface AddPageProps {
+    url: string | undefined
     dismiss: (anyChanges: boolean) => void;
 }
 
-const AddPage = ({ dismiss }: AddPageProps) => {
-    const { bookmark, isExistingBookmark, setBookmark, saveBookmark } = useNewBookmark();
+const AddPage = ({ url, dismiss }: AddPageProps) => {
+    const { bookmark, isExistingBookmark, setBookmark, saveBookmark } = useNewBookmark(url || '');
     const [showToast, dismissToast] = useIonToast();
     const pageRef = useRef<HTMLElement | null>(null);
 

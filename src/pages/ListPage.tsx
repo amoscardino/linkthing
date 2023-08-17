@@ -23,6 +23,7 @@ import useBookmarks from "hooks/useBookmarks";
 import useViewMode from "hooks/useViewMode";
 import { ViewMode } from "types/viewMode";
 import TagsButton from "components/TagsButton";
+import useAddNewUrl from "hooks/useAddNewUrl";
 
 const ListPage = () => {
     const pageRef = useRef<HTMLElement | null>(null);
@@ -41,6 +42,12 @@ const ListPage = () => {
         loadMore
     } = useBookmarks(showSearch, viewMode, searchQuery);
 
+    const handleRefresh = async (): Promise<void> => {
+        await refresh();
+    };
+
+    useAddNewUrl(pageRef.current, handleRefresh);
+
     useEffect(() => {
         const timeoutId = setTimeout(async () => {
             if (showSearch)
@@ -49,10 +56,6 @@ const ListPage = () => {
 
         return () => clearTimeout(timeoutId);
     }, [showSearch]);
-
-    const handleRefresh = async (): Promise<void> => {
-        await refresh();
-    };
 
     const handleInfiniteScroll = async (evt: InfiniteScrollCustomEvent) => {
         await loadMore();
