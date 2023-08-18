@@ -8,18 +8,17 @@ import {
 } from "@ionic/react";
 import { bookmark as bookmarkIcon, bookmarkOutline } from "ionicons/icons";
 import { Browser } from '@capacitor/browser';
-import { format, parseISO } from "date-fns";
 import { useRecoilValue } from "recoil";
 import browserSettingAtom from "state/browserSettingState";
 import listItemSettingAtom from "state/listItemSettingState";
 import Bookmark from "api/types/bookmark";
 import { getBookmarkDescription, getBookmarkTitle } from "utils/bookmarks";
-import { getDomain } from "utils/urls";
 import ToggleReadOption from "components/BookmarkListItemOptions/ToggleReadOption";
 import CopyOption from "components/BookmarkListItemOptions/CopyOption";
 import ShareOption from "components/BookmarkListItemOptions/ShareOption";
 import EditOption from "components/BookmarkListItemOptions/EditOption";
-import Tag from "./Tag";
+import ListItemTags from "./ListItemTags";
+import ListItemDateAndDomain from "./ListItemDateAndDomain";
 
 interface BookmarkListItemProps {
     bookmark: Bookmark;
@@ -32,8 +31,7 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
     const browserMode = useRecoilValue(browserSettingAtom);
     const listItemMode = useRecoilValue(listItemSettingAtom);
     const description = getBookmarkDescription(bookmark);
-    const showDescription = (listItemMode === 'description' || listItemMode === 'both') && description.length > 0;
-    const showTags = (listItemMode === 'tags' || listItemMode === 'both') && (bookmark.tag_names || []).length > 0;
+    const tags = bookmark.tag_names || [];
 
     const itemProps = browserMode === 'external'
         ? { href: bookmark.url, target: "_blank" }
@@ -54,27 +52,33 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
                         {getBookmarkTitle(bookmark)}
                     </h2>
 
-                    {showTags && (
-                        <p>
-                            {(bookmark.tag_names || []).map(tag => (
-                                <Tag key={tag} tag={tag} />
-                            ))}
-                        </p>
+                    {listItemMode === 'tags' && (
+                        <>
+                            <ListItemDateAndDomain date={bookmark.date_added} url={bookmark.url} />
+                            <ListItemTags tags={tags} />
+                        </>
                     )}
 
-                    {showDescription && (
-                        <p className="two-line-truncate">
-                            {description}
-                        </p>
+                    {listItemMode === 'description' && (
+                        <>
+                            <p className="two-line-truncate">
+                                {description}
+                            </p>
+
+                            <ListItemDateAndDomain date={bookmark.date_added} url={bookmark.url} small />
+                        </>
                     )}
 
-                    <p>
-                        <small>
-                            {format(parseISO(bookmark.date_added), 'MMM d, yyyy')}
-                            <span> — </span>
-                            {getDomain(bookmark.url)}
-                        </small>
-                    </p>
+                    {listItemMode === 'both' && (
+                        <>
+                            <p className="two-line-truncate">
+                                {description}
+                            </p>
+
+                            <ListItemDateAndDomain date={bookmark.date_added} url={bookmark.url} small />
+                            <ListItemTags tags={tags} />
+                        </>
+                    )}
                 </IonLabel>
             </IonItem>
 
