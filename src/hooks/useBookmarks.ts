@@ -4,7 +4,7 @@ import Bookmark from "api/types/bookmark";
 import { QueryResult } from "types/results";
 import { ViewMode } from "types/viewMode";
 
-interface UseBookmarksResult extends QueryResult {
+export interface UseBookmarksResult extends QueryResult {
     bookmarks?: Bookmark[];
     enabled: boolean;
     refresh: () => Promise<void>;

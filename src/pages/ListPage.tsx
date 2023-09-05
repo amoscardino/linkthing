@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import {
     InfiniteScrollCustomEvent,
     IonButton,
@@ -13,46 +12,37 @@ import {
     IonToolbar
 } from "@ionic/react";
 import { search } from "ionicons/icons";
+import useBookmarksList from "hooks/useBookmarksList";
+import { ViewMode } from "types/viewMode";
 import BookmarkListItem from "components/BookmarkListItem";
 import QueryResultDisplay from "components/QueryResultDisplay";
 import SettingsButton from "components/SettingsButton";
 import StandardPage from "components/StandardPage";
 import Footer from "components/Footer";
 import AddButton from "components/AddButton";
-import useBookmarks from "hooks/useBookmarks";
-import useViewMode from "hooks/useViewMode";
-import { ViewMode } from "types/viewMode";
 import TagsButton from "components/TagsButton";
 
 const ListPage = () => {
-    const pageRef = useRef<HTMLElement | null>(null);
-    const searchbarRef = useRef<HTMLIonSearchbarElement | null>(null);
-    const { viewMode, setViewMode } = useViewMode();
-    const [showSearch, setShowSearch] = useState<boolean>(false);
-    const [searchQuery, setSearchQuery] = useState<string>('');
     const {
-        bookmarks,
-        enabled,
-        isSuccess,
-        isLoading,
-        isError,
-        refresh,
-        canLoadMore,
-        loadMore
-    } = useBookmarks(showSearch, viewMode, searchQuery);
-
-    useEffect(() => {
-        const timeoutId = setTimeout(async () => {
-            if (showSearch)
-                await searchbarRef.current?.setFocus();
-        }, 50);
-
-        return () => clearTimeout(timeoutId);
-    }, [showSearch]);
-
-    const handleRefresh = async (): Promise<void> => {
-        await refresh();
-    };
+        pageRef,
+        searchbarRef,
+        viewMode,
+        setViewMode,
+        showSearch,
+        setShowSearch,
+        searchQuery,
+        setSearchQuery,
+        bookmarksResult: {
+            bookmarks,
+            enabled,
+            isLoading,
+            isError,
+            isSuccess,
+            canLoadMore,
+            loadMore,
+            refresh
+        }
+    } = useBookmarksList();
 
     const handleInfiniteScroll = async (evt: InfiniteScrollCustomEvent) => {
         await loadMore();
@@ -99,11 +89,11 @@ const ListPage = () => {
 
     const primaryHeaderButton = showSearch
         ? (<IonButton onClick={() => setShowSearch(false)}>Cancel</IonButton>)
-        : (<AddButton onChanges={handleRefresh} containingPage={pageRef.current} />);
+        : (<AddButton onChanges={refresh} containingPage={pageRef.current} />);
 
     const secondaryHeaderButton = showSearch
         ? (undefined)
-        : (<SettingsButton onChanges={handleRefresh} containingPage={pageRef.current} />);
+        : (<SettingsButton onChanges={refresh} containingPage={pageRef.current} />);
 
     return (
         <StandardPage
@@ -111,14 +101,14 @@ const ListPage = () => {
             ref={pageRef}
             primaryButton={primaryHeaderButton}
             secondaryButton={secondaryHeaderButton}
-            onPullToRefresh={handleRefresh}
+            onPullToRefresh={refresh}
             footer={footerToolbar}
         >
             {showSearch && (
                 <IonSearchbar
                     ref={searchbarRef}
                     value={searchQuery}
-                    onIonChange={e => setSearchQuery(e.detail.value || '')}
+                    onIonInput={e => setSearchQuery(e.detail.value || '')}
                     debounce={750}
                 />
             )}
@@ -134,13 +124,8 @@ const ListPage = () => {
                             {(bookmarks || []).map(bookmark => (
                                 <BookmarkListItem
                                     key={bookmark.id}
-                                    id={bookmark.id}
-                                    url={bookmark.url}
-                                    title={bookmark.title || bookmark.website_title || bookmark.url}
-                                    description={bookmark.description || bookmark.website_description}
-                                    unread={bookmark.unread}
-                                    dateAdded={bookmark.date_added}
-                                    listRefresh={handleRefresh}
+                                    bookmark={bookmark}
+                                    listRefresh={refresh}
                                     containingPage={pageRef.current}
                                 />
                             ))}

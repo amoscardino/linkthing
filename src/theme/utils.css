@@ -13,6 +13,10 @@
     overflow: hidden;
 }
 
+ion-item.item-top-align::part(native) {
+    align-items: flex-start;
+}
+
 /* Fix for refresher being hidden by the toolbar */
 ion-app.ios ion-refresher.refresher-active {
     z-index: 1;

@@ -8,17 +8,17 @@ interface AddButtonProps {
 }
 
 const AddButton = ({ containingPage, onChanges }: AddButtonProps) => {
-    const handleDismiss = async (anyChanges: boolean) => {
+    const handleNewModalDismiss = async (anyChanges: boolean) => {
         if (anyChanges)
             await onChanges();
 
-        dismissModal();
+        dismissNewModal();
     };
 
-    const [showModal, dismissModal] = useIonModal(AddPage, { dismiss: handleDismiss });
+    const [showNewModal, dismissNewModal] = useIonModal(AddPage, { dismiss: handleNewModalDismiss });
 
     const handleAddButtonClick = () => {
-        showModal({
+        showNewModal({
             canDismiss: true,
             presentingElement: containingPage || undefined
         });

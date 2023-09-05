@@ -12,8 +12,8 @@ interface UseNewBookmarkResult {
     saveBookmark: () => Promise<void>;
 }
 
-const useNewBookmark = (): UseNewBookmarkResult => {
-    const [bookmark, setBookmark] = useState({ unread: true } as Bookmark);
+const useNewBookmark = (url: string): UseNewBookmarkResult => {
+    const [bookmark, setBookmark] = useState({ url: url, unread: true } as Bookmark);
     const [isExistingBookmark, setIsExistingBookmark] = useState(false);
     const { settings } = useSettings();
     const queryClient = useQueryClient();
@@ -36,9 +36,9 @@ const useNewBookmark = (): UseNewBookmarkResult => {
             }
         };
 
-        if (settings && !settings?.disableClipboard)
+        if (!url.length && settings && !settings?.disableClipboard)
             tryLoadUrlFromClipboard();
-    }, [settings, settings?.disableClipboard]);
+    }, [url, settings, settings?.disableClipboard]);
 
     useEffect(() => {
         const loadMetadata = async () => {
