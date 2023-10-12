@@ -60,7 +60,7 @@ const ListPage = () => {
 
     const footerToolbar = !showSearch
         ? (
-            <IonToolbar>
+            <IonToolbar id="FooterToolbar">
                 <IonSegment
                     value={viewMode?.toString()}
                     onIonChange={(e) => setViewMode((e.detail.value || 'unread') as ViewMode)}
