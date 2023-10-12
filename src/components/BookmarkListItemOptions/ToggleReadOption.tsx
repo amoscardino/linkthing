@@ -31,6 +31,7 @@ const ToggleReadOption = ({ id, unread, slidingRef, listRefresh }: ToggleReadOpt
             icon: unread ? bookmarkOutline : bookmark,
             color: "medium",
             duration: 3000,
+            positionAnchor: 'FooterToolbar',
             buttons: [{
                 text: 'Ok',
                 handler: async () => dismissToast()

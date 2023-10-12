@@ -10,7 +10,7 @@ interface EditOptionProps {
 }
 
 const EditOption = ({ id, listRefresh, slidingRef, containingPage }: EditOptionProps) => {
-    const handleEdiModalDismiss = async (anyChanges: boolean) => {
+    const handleEditModalDismiss = async (anyChanges: boolean) => {
         if (anyChanges)
             await listRefresh();
 
@@ -18,8 +18,7 @@ const EditOption = ({ id, listRefresh, slidingRef, containingPage }: EditOptionP
         await slidingRef.current?.close();
     };
 
-    const [showEditModal, dismissEditModal] = useIonModal(EditPage, { id, dismiss: handleEdiModalDismiss });
-
+    const [showEditModal, dismissEditModal] = useIonModal(EditPage, { id, dismiss: handleEditModalDismiss });
 
     const handleEditOptionClick = async () => {
         showEditModal({
