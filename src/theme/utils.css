@@ -12,3 +12,17 @@
     -webkit-box-orient: vertical;
     overflow: hidden !important;
 }
+
+@media screen and (prefers-color-scheme: dark) {
+    ion-modal.ios ion-list,
+    ion-modal.ios ion-list ion-item {
+        --background: var(--ion-background-color);
+        background: var(--ion-background-color);
+    }
+
+    ion-card.ios ion-list,
+    ion-card.ios ion-list ion-item {
+        --background: var(--ion-card-background-color);
+        background: var(--ion-card-background-color);
+    }
+}
