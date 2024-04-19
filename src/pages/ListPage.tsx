@@ -127,6 +127,7 @@ const ListPage = () => {
                                     bookmark={bookmark}
                                     listRefresh={refresh}
                                     containingPage={pageRef.current}
+                                    onTagClick={handleTagChange}
                                 />
                             ))}
                         </IonList>

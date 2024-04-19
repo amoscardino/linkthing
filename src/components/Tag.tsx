@@ -5,7 +5,7 @@ import { checkmarkCircle, pricetagOutline } from "ionicons/icons";
 interface TagProps {
     tag: string;
     isActive?: boolean;
-    onClick?: () => void;
+    onClick?: (evt: React.MouseEvent) => void;
 }
 
 const Tag = (props: TagProps) => {
