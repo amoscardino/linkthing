@@ -1,22 +1,22 @@
 PODS:
-  - Capacitor (5.0.3):
+  - Capacitor (6.0.0):
     - CapacitorCordova
-  - CapacitorApp (5.0.6):
+  - CapacitorApp (6.0.0):
     - Capacitor
-  - CapacitorBrowser (5.0.2):
+  - CapacitorBrowser (6.0.0):
     - Capacitor
-  - CapacitorClipboard (5.0.2):
+  - CapacitorClipboard (6.0.0):
     - Capacitor
-  - CapacitorCordova (5.0.3)
-  - CapacitorHaptics (5.0.2):
+  - CapacitorCordova (6.0.0)
+  - CapacitorHaptics (6.0.0):
     - Capacitor
-  - CapacitorKeyboard (5.0.2):
+  - CapacitorKeyboard (6.0.0):
     - Capacitor
-  - CapacitorPreferences (5.0.2):
+  - CapacitorPreferences (6.0.0):
     - Capacitor
-  - CapacitorShare (5.0.2):
+  - CapacitorShare (6.0.0):
     - Capacitor
-  - CapacitorStatusBar (5.0.2):
+  - CapacitorStatusBar (6.0.0):
     - Capacitor
 
 DEPENDENCIES:
@@ -54,17 +54,17 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
 
 SPEC CHECKSUMS:
-  Capacitor: 304a960e431f9e6f78556554ca71c41c1b2b9680
-  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
-  CapacitorBrowser: 7986ee35377383fc40f7c1a0a793e0d9a49fe527
-  CapacitorClipboard: a198f34cd0ed4d1777da5edae13445227ec05be3
-  CapacitorCordova: def732a63679698df6fb392bbe6d269a0b61e937
-  CapacitorHaptics: 864585542a435bd41eaabf7f30d9ff5ec03024d3
-  CapacitorKeyboard: e628d4e66d621c69e449945ebabded17c5b9c2e8
-  CapacitorPreferences: 0ad8838944f900284900d9647d9b0145c89ca27d
-  CapacitorShare: 931224a0e17615e799d35b26286ab1d05f37d8fb
-  CapacitorStatusBar: 48f2899f6846cc7d8431b251ebfc58e1c10e3d58
+  Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
+  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
+  CapacitorBrowser: 7e1e2cdbb3e372f09f0bad0c4c21a6d187b679ad
+  CapacitorClipboard: 80282f684154124b9019ebf401235b70b0cf4994
+  CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
+  CapacitorHaptics: 9ebc9363f0e9b8eb4295088a0b474530acf1859b
+  CapacitorKeyboard: deacbd09d8d1029c3681197fb05d206b721d5f73
+  CapacitorPreferences: c9b839a80baa72e4ed4bdb117618e1950d3046b5
+  CapacitorShare: a771200d3b924a5d7ad9d9fecbac517e4c0aa74f
+  CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
 
 PODFILE CHECKSUM: cf9cf65c37582f6f99db818ccd8d66cb74f7de04
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.3

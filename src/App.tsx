@@ -15,7 +15,7 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-import 'theme/variables.css';
+import '@ionic/react/css/palettes/dark.system.css';
 import 'theme/utils.css';
 
 setupIonicReact();

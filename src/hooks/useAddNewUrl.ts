@@ -1,25 +1,35 @@
 import { useEffect, useState } from "react";
-import { useAppUrlOpen } from "@capacitor-community/app-react";
+import { App } from '@capacitor/app';
 import { useIonModal } from "@ionic/react";
 import AddPage from "pages/AddPage";
+import { PluginListenerHandle } from "@capacitor/core";
 
 const useAddNewUrl = (containingPage: HTMLElement | null, onChanges: () => Promise<void>) => {
-    const { appUrlOpen } = useAppUrlOpen();
     const [url, setUrl] = useState<string>('');
 
     useEffect(() => {
-        if (!appUrlOpen?.length)
-            return;
+        let listener = null as PluginListenerHandle | null;
 
-        const parsedUrl = new URL(appUrlOpen);
+        (async () => {
+            listener = await App.addListener('appUrlOpen', data => {
+                if (!data.url.length)
+                    return;
 
-        console.log(`Launch URL: ${parsedUrl}`);
+                const parsedUrl = new URL(data.url);
 
-        if (parsedUrl.protocol !== 'linkthing:' && parsedUrl.pathname !== '/add')
-            return;
+                console.log(`Launch URL: ${parsedUrl}`);
 
-        setUrl(parsedUrl.searchParams.get('url') || '');
-    }, [appUrlOpen, setUrl]);
+                if (parsedUrl.protocol !== 'linkthing:' && parsedUrl.pathname !== '/add')
+                    return;
+
+                setUrl(parsedUrl.searchParams.get('url') || '');
+            });
+        })();
+
+        return () => {
+            listener?.remove();
+        };
+    }, [setUrl]);
 
     const handleUrlModalDismiss = async (anyChanges: boolean) => {
         setUrl('');

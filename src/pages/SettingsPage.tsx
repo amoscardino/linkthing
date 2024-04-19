@@ -158,15 +158,9 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                 </IonItem>
 
                 <IonItem lines="none" className="ion-margin-bottom">
-                    <IonLabel>
+                    <IonToggle checked={!settings?.disableClipboard} onIonChange={handleClipboardChange}>
                         Enable Clipboard Detection
-                    </IonLabel>
-
-                    <IonToggle
-                        slot="end"
-                        checked={!settings?.disableClipboard}
-                        onIonChange={handleClipboardChange}
-                    />
+                    </IonToggle>
 
                     <IonNote slot="helper">
                         Enables or disable reading from the clipboard when creating bookmarks.
