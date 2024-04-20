@@ -15,7 +15,7 @@ const CopyOption = ({ url, slidingRef }: CopyOptionProps) => {
 
     return (
         <IonItemOption
-            color="medium"
+            color="tertiary"
             onClick={handleCopyOptionClick}
         >
             <IonIcon slot="start" icon={copyOutline} />

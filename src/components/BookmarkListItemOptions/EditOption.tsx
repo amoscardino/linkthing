@@ -30,7 +30,7 @@ const EditOption = ({ id, listRefresh, slidingRef, containingPage }: EditOptionP
 
     return (
         <IonItemOption
-            color="secondary"
+            color="primary"
             onClick={handleEditOptionClick}
         >
             <IonIcon slot="start" icon={pencilOutline} />

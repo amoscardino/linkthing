@@ -13,6 +13,10 @@
     overflow: hidden !important;
 }
 
+ion-item.item-top-align::part(native) {
+    align-items: flex-start;
+}
+
 @media screen and (prefers-color-scheme: dark) {
     ion-modal.ios ion-list,
     ion-modal.ios ion-list ion-item {
