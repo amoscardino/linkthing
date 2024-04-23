@@ -14,8 +14,8 @@ const Tag = (props: TagProps) => {
     return (
         <IonChip
             onClick={props.onClick}
-            color={props.isActive ? 'primary' : 'medium'}
-            outline={!isDarkMode}
+            color={props.isActive ? 'primary' : undefined}
+            outline
         >
             <IonIcon icon={props.isActive ? checkmarkCircle : pricetagOutline} />
             <IonLabel>{props.tag}</IonLabel>
