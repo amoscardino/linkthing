@@ -146,15 +146,12 @@ const EditPage = ({ id, dismiss }: EditPageProps) => {
                 </IonItem>
 
                 <IonItem className="ion-margin-bottom">
-                    <IonLabel>
-                        Unread?
-                    </IonLabel>
-
                     <IonToggle
-                        slot="end"
                         checked={bookmark.unread}
                         onIonChange={e => setBookmark(prev => ({ ...prev, unread: e.target.checked } as Bookmark))}
-                    />
+                    >
+                        Unread?
+                    </IonToggle>
                 </IonItem>
 
                 <IonItem className="ion-margin-top" lines="none">

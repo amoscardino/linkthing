@@ -18,7 +18,7 @@ const ShareOption = ({ bookmark, slidingRef }: ShareOptionProps) => {
 
     return (
         <IonItemOption
-            color="tertiary"
+            color="secondary"
             onClick={handleShareOptionClick}
         >
             <IonIcon slot="start" icon={shareOutline} />

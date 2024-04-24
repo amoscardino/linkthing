@@ -4,7 +4,6 @@ const config: CapacitorConfig = {
     appId: 'com.moscardino.LinkThing',
     appName: 'LinkThing',
     webDir: 'build',
-    bundledWebRuntime: false,
     plugins: {
         CapacitorHttp: {
             enabled: true

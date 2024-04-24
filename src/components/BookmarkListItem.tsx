@@ -24,9 +24,10 @@ interface BookmarkListItemProps {
     bookmark: Bookmark;
     listRefresh: () => Promise<void>;
     containingPage: HTMLElement | null;
+    onTagClick: (tag: string | null) => Promise<void>;
 }
 
-const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkListItemProps) => {
+const BookmarkListItem = ({ bookmark, listRefresh, containingPage, onTagClick }: BookmarkListItemProps) => {
     const slidingRef = useRef<HTMLIonItemSlidingElement | null>(null);
     const browserMode = useRecoilValue(browserSettingAtom);
     const listItemMode = useRecoilValue(listItemSettingAtom);
@@ -55,7 +56,7 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
                     {listItemMode === 'tags' && (
                         <>
                             <ListItemDateAndDomain date={bookmark.date_added} url={bookmark.url} />
-                            <ListItemTags tags={tags} />
+                            <ListItemTags tags={tags} onTagClick={onTagClick} />
                         </>
                     )}
 
@@ -76,7 +77,7 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage }: BookmarkLis
                             </p>
 
                             <ListItemDateAndDomain date={bookmark.date_added} url={bookmark.url} small />
-                            <ListItemTags tags={tags} />
+                            <ListItemTags tags={tags} onTagClick={onTagClick} />
                         </>
                     )}
                 </IonLabel>
