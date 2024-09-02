@@ -1,6 +1,6 @@
 {
   "name": "link-thing",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "private": true,
   "dependencies": {
     "@capacitor/app": "^6.0.0",
@@ -21,6 +21,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "classnames": "^2.5.1",
     "date-fns": "^2.29.3",
     "history": "^4.9.0",
     "ionicons": "^6.0.3",

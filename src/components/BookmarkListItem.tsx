@@ -1,12 +1,10 @@
 import { useRef } from "react";
 import {
-    IonIcon,
     IonItem,
     IonItemOptions,
     IonItemSliding,
     IonLabel,
 } from "@ionic/react";
-import { bookmark as bookmarkIcon, bookmarkOutline } from "ionicons/icons";
 import { Browser } from '@capacitor/browser';
 import { useRecoilValue } from "recoil";
 import browserSettingAtom from "state/browserSettingState";
@@ -19,6 +17,8 @@ import ShareOption from "components/BookmarkListItemOptions/ShareOption";
 import EditOption from "components/BookmarkListItemOptions/EditOption";
 import ListItemTags from "./ListItemTags";
 import ListItemDateAndDomain from "./ListItemDateAndDomain";
+import BookmarkIcon from "./BookmarkIcon";
+import classNames from "classnames";
 
 interface BookmarkListItemProps {
     bookmark: Bookmark;
@@ -36,20 +36,20 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage, onTagClick }:
 
     const itemProps = browserMode === 'external'
         ? { href: bookmark.url, target: "_blank" }
-        : { button: true, onClick: async () => { await Browser.open({ url: bookmark.url }) } }
+        : { button: true, onClick: async () => { await Browser.open({ url: bookmark.url }) } };
+
+    var titleClasses = classNames('two-line-truncate', { 'fw-bold': bookmark.unread });
 
     return (
         <IonItemSliding ref={slidingRef}>
             <IonItem {...itemProps} detail={false} className="item-top-align">
-                <IonIcon
-                    slot="start"
-                    color={bookmark.unread ? "primary" : "medium"}
-                    icon={bookmark.unread ? bookmarkIcon : bookmarkOutline}
-                    className="ion-margin-top"
+                <BookmarkIcon
+                    faviconUrl={bookmark.favicon_url}
+                    unread={bookmark.unread}
                 />
 
                 <IonLabel className="ion-text-wrap">
-                    <h2 className="two-line-truncate">
+                    <h2 className={titleClasses}>
                         {getBookmarkTitle(bookmark)}
                     </h2>
 

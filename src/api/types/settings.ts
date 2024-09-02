@@ -9,4 +9,5 @@ export interface Settings {
     initialViewMode?: ViewMode;
     listItemMode?: ItemMode;
     browserMode?: BrowserMode;
+    showFavicons?: boolean;
 }

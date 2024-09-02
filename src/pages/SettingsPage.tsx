@@ -7,7 +7,6 @@ import {
     IonLabel,
     IonList,
     IonListHeader,
-    IonNote,
     IonSelect,
     IonSelectOption,
     IonToggle
@@ -63,6 +62,10 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
 
     const handleBrowserModeChange = (evt: CustomEvent<SelectChangeEventDetail>) => {
         setSettings(prev => ({ ...prev, browserMode: evt.detail.value || 'in-app' } as Settings));
+    };
+
+    const handleShowFaviconsChange = (evt: CustomEvent<ToggleChangeEventDetail>) => {
+        setSettings(prev => ({ ...prev, showFavicons: evt.detail.checked } as Settings));
     };
 
     const closeButton = (
@@ -157,14 +160,19 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                     </IonSelect>
                 </IonItem>
 
-                <IonItem lines="none" className="ion-margin-bottom">
+                <IonItem>
                     <IonToggle checked={!settings?.disableClipboard} onIonChange={handleClipboardChange}>
                         Enable Clipboard Detection
                     </IonToggle>
+                </IonItem>
 
-                    <IonNote slot="helper">
-                        Enables or disable reading from the clipboard when creating bookmarks.
-                    </IonNote>
+                <IonItem lines="none" className="ion-margin-bottom">
+                    <IonToggle
+                        checked={settings?.showFavicons || false}
+                        onIonChange={handleShowFaviconsChange}
+                    >
+                        Show Favicons
+                    </IonToggle>
                 </IonItem>
 
                 <IonListHeader className="ion-margin-top ion-padding-top">

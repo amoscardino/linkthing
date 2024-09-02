@@ -6,6 +6,7 @@ import hasSettingsAtom from "state/hasSettingsState";
 import { getSettings, saveSettings } from "api/settingsApi";
 import browserSettingAtom from "state/browserSettingState";
 import listItemSettingAtom from "state/listItemSettingState";
+import showFaviconsSettingAtom from "state/showFaviconsSettingState";
 
 interface UseSettingsResult {
     settings?: Settings;
@@ -15,8 +16,9 @@ interface UseSettingsResult {
 
 const useSettings = (): UseSettingsResult => {
     const [, setHasSettings] = useRecoilState(hasSettingsAtom);
-    const [, setBrowserSettings] = useRecoilState(browserSettingAtom);
-    const [, setListItemSettings] = useRecoilState(listItemSettingAtom);
+    const [, setBrowserSetting] = useRecoilState(browserSettingAtom);
+    const [, setListItemSetting] = useRecoilState(listItemSettingAtom);
+    const [, setShowFaviconsSetting] = useRecoilState(showFaviconsSettingAtom);
     const [settings, setSettings] = useState<Settings | undefined>(undefined);
     const queryClient = useQueryClient();
 
@@ -32,8 +34,9 @@ const useSettings = (): UseSettingsResult => {
         const hasSettings = settings !== undefined && (settings.instanceUrl?.length || 0) > 0 && (settings.token?.length || 0) > 0;
 
         setHasSettings(hasSettings);
-        setBrowserSettings(settings?.browserMode || null);
-        setListItemSettings(settings?.listItemMode || 'description');
+        setBrowserSetting(settings?.browserMode || null);
+        setListItemSetting(settings?.listItemMode || 'description');
+        setShowFaviconsSetting(settings?.showFavicons || false);
         await saveSettings(settings);
 
         if (hasSettings)
