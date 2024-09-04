@@ -18,7 +18,6 @@ import EditOption from "components/BookmarkListItemOptions/EditOption";
 import ListItemTags from "./ListItemTags";
 import ListItemDateAndDomain from "./ListItemDateAndDomain";
 import BookmarkIcon from "./BookmarkIcon";
-import classNames from "classnames";
 
 interface BookmarkListItemProps {
     bookmark: Bookmark;
@@ -38,8 +37,6 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage, onTagClick }:
         ? { href: bookmark.url, target: "_blank" }
         : { button: true, onClick: async () => { await Browser.open({ url: bookmark.url }) } };
 
-    var titleClasses = classNames('two-line-truncate', { 'fw-bold': bookmark.unread });
-
     return (
         <IonItemSliding ref={slidingRef}>
             <IonItem {...itemProps} detail={false} className="item-top-align">
@@ -49,7 +46,7 @@ const BookmarkListItem = ({ bookmark, listRefresh, containingPage, onTagClick }:
                 />
 
                 <IonLabel className="ion-text-wrap">
-                    <h2 className={titleClasses}>
+                    <h2 className="two-line-truncate">
                         {getBookmarkTitle(bookmark)}
                     </h2>
 

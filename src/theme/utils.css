@@ -13,10 +13,6 @@
     overflow: hidden !important;
 }
 
-.fw-bold {
-    font-weight: 800 !important;
-}
-
 ion-item.item-top-align::part(native) {
     align-items: flex-start;
 }
@@ -34,21 +30,4 @@ ion-item.item-top-align::part(native) {
         --background: var(--ion-card-background-color);
         background: var(--ion-card-background-color);
     }
-}
-
-.dot {
-    position: relative;
-    contain: unset;
-    --dot-size: 0.5rem;
-}
-
-.dot::before {
-    content: '';
-    position: absolute;
-    top: calc(-0.5 * var(--dot-size));
-    right: calc(-0.5 * var(--dot-size));
-    width: var(--dot-size);
-    height: var(--dot-size);
-    border-radius: 50%;
-    background-color: var(--ion-color-primary);
 }

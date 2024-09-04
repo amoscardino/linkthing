@@ -1,6 +1,5 @@
 import { IonIcon, IonThumbnail } from "@ionic/react";
-import classNames from "classnames";
-import { bookmark, bookmarkOutline } from "ionicons/icons";
+import { bookmark, bookmarkOutline, globeOutline } from "ionicons/icons";
 import { useRecoilValue } from "recoil";
 import showFaviconsSettingAtom from "state/showFaviconsSettingState";
 
@@ -11,7 +10,6 @@ interface BookmarkIconProps {
 
 const BookmarkIcon = ({ faviconUrl, unread }: BookmarkIconProps) => {
     const showFavicons = useRecoilValue(showFaviconsSettingAtom);
-    const classes = classNames('ion-margin-top', { 'dot': unread });
 
     if (!showFavicons) {
         return (
@@ -25,26 +23,42 @@ const BookmarkIcon = ({ faviconUrl, unread }: BookmarkIconProps) => {
         );
     }
 
+    const unreadIcon = unread ? (
+        <IonIcon
+            slot="end"
+            color="primary"
+            icon={bookmark}
+            style={{ 'font-size': '1.5rem' }}
+            className="ion-margin-top"
+        />
+    ) : null;
+
     if (faviconUrl && faviconUrl.length > 0) {
         return (
-            <IonThumbnail
-                slot="start"
-                style={{ '--size': '1.5rem', '--border-radius': '0.5rem' }}
-                className={classes}
-            >
-                <img alt="" src={faviconUrl} />
-            </IonThumbnail>
+            <>
+                <IonThumbnail
+                    slot="start"
+                    style={{ '--size': '1.5rem', '--border-radius': '0.5rem' }}
+                    className="ion-margin-top"
+                >
+                    <img alt="" src={faviconUrl} />
+                </IonThumbnail>
+                {unreadIcon}
+            </>
         );
     }
 
     return (
-        <IonIcon
-            slot="start"
-            color="primary"
-            icon={bookmarkOutline}
-            style={{ 'font-size': '1.5rem' }}
-            className={classes}
-        />
+        <>
+            <IonIcon
+                slot="start"
+                color="primary"
+                icon={globeOutline}
+                style={{ 'font-size': '1.5rem' }}
+                className="ion-margin-top"
+            />
+            {unreadIcon}
+        </>
     );
 };
 
