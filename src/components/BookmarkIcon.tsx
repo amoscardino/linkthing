@@ -4,62 +4,50 @@ import { useRecoilValue } from "recoil";
 import showFaviconsSettingAtom from "state/showFaviconsSettingState";
 
 interface BookmarkIconProps {
-    faviconUrl: string | null;
-    unread: boolean;
+  faviconUrl: string | null;
+  unread: boolean;
 }
 
 const BookmarkIcon = ({ faviconUrl, unread }: BookmarkIconProps) => {
-    const showFavicons = useRecoilValue(showFaviconsSettingAtom);
+  const showFavicons = useRecoilValue(showFaviconsSettingAtom);
+  let iconClass = 'ion-margin-top';
 
-    if (!showFavicons) {
-        return (
-            <IonIcon
-                slot="start"
-                color="primary"
-                icon={unread ? bookmark : bookmarkOutline}
-                style={{ 'font-size': '1.5rem' }}
-                className="ion-margin-top"
-            />
-        );
-    }
-
-    const unreadIcon = unread ? (
-        <IonIcon
-            slot="end"
-            color="primary"
-            icon={bookmark}
-            style={{ 'font-size': '1.5rem' }}
-            className="ion-margin-top"
-        />
-    ) : null;
-
-    if (faviconUrl && faviconUrl.length > 0) {
-        return (
-            <>
-                <IonThumbnail
-                    slot="start"
-                    style={{ '--size': '1.5rem', '--border-radius': '0.5rem' }}
-                    className="ion-margin-top"
-                >
-                    <img alt="" src={faviconUrl} />
-                </IonThumbnail>
-                {unreadIcon}
-            </>
-        );
-    }
-
+  if (!showFavicons) {
     return (
-        <>
-            <IonIcon
-                slot="start"
-                color="primary"
-                icon={globeOutline}
-                style={{ 'font-size': '1.5rem' }}
-                className="ion-margin-top"
-            />
-            {unreadIcon}
-        </>
+      <IonIcon
+        slot="start"
+        color="primary"
+        icon={unread ? bookmark : bookmarkOutline}
+        style={{ 'font-size': '1.5rem' }}
+        className={iconClass}
+      />
     );
+  }
+
+  if (unread)
+    iconClass = `${iconClass} dot`;
+
+  if (faviconUrl && faviconUrl.length > 0) {
+    return (
+      <IonThumbnail
+        slot="start"
+        style={{ '--size': '1.5rem', '--border-radius': '0.5rem' }}
+        className={iconClass}
+      >
+        <img alt="" src={faviconUrl} />
+      </IonThumbnail>
+    );
+  }
+
+  return (
+    <IonIcon
+      slot="start"
+      color="primary"
+      icon={globeOutline}
+      style={{ 'font-size': '1.5rem' }}
+      className={iconClass}
+    />
+  );
 };
 
 export default BookmarkIcon;
