@@ -18,7 +18,7 @@ const BookmarkIcon = ({ faviconUrl, unread }: BookmarkIconProps) => {
         slot="start"
         color="primary"
         icon={unread ? bookmark : bookmarkOutline}
-        style={{ 'font-size': '1.5rem' }}
+        style={{ 'fontSize': '1.5rem' }}
         className={iconClass}
       />
     );
@@ -44,7 +44,7 @@ const BookmarkIcon = ({ faviconUrl, unread }: BookmarkIconProps) => {
       slot="start"
       color="primary"
       icon={globeOutline}
-      style={{ 'font-size': '1.5rem' }}
+      style={{ 'fontSize': '1.5rem' }}
       className={iconClass}
     />
   );

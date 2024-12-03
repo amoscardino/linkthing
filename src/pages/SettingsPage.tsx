@@ -1,17 +1,19 @@
 import { InputChangeEventDetail, SelectChangeEventDetail, ToggleChangeEventDetail } from "@ionic/core";
 import {
   IonButton,
+  IonContent,
   IonIcon,
   IonInput,
   IonItem,
   IonLabel,
   IonList,
   IonListHeader,
+  IonPopover,
   IonSelect,
   IonSelectOption,
   IonToggle
 } from "@ionic/react";
-import { checkmarkOutline, closeOutline } from "ionicons/icons";
+import { checkmarkOutline, closeOutline, helpCircleOutline } from "ionicons/icons";
 import StandardPage from "components/StandardPage";
 import { tapMedium } from "utils/haptics";
 import useSettings from "hooks/useSettings";
@@ -171,10 +173,10 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
             checked={settings?.showFavicons || false}
             onIonChange={handleShowFaviconsChange}
           >
-            <span className="ion-text-wrap">
-              Show Favicons (Requires linkding 1.31 or later)
-            </span>
+            Show Favicons
           </IonToggle>
+
+          <IonIcon id="FaviconHelpIcon" icon={helpCircleOutline} slot="start" />
         </IonItem>
 
         <IonListHeader className="ion-margin-top ion-padding-top">
@@ -201,6 +203,10 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
 
         <Footer />
       </IonList>
+
+      <IonPopover trigger="FaviconHelpIcon" triggerAction="click">
+        <IonContent class="ion-padding">Requires linkding 1.31 or later.</IonContent>
+      </IonPopover>
     </StandardPage >
   );
 };
