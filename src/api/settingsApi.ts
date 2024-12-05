@@ -12,6 +12,7 @@ const getSettings = async (): Promise<Settings> => {
     const initialViewMode = (await Preferences.get({ key: 'initialViewMode' })).value;
     const listItemMode = (await Preferences.get({ key: 'listItemMode' })).value;
     const browserMode = (await Preferences.get({ key: 'browserMode' })).value;
+    const showFavicons = (await Preferences.get({ key: 'showFavicons' })).value;
 
     return {
         instanceUrl,
@@ -19,7 +20,8 @@ const getSettings = async (): Promise<Settings> => {
         disableClipboard: disableClipboard?.length,
         initialViewMode: initialViewMode || 'unread',
         listItemMode: listItemMode || 'description',
-        browserMode: browserMode || 'in-app'
+        browserMode: browserMode || 'in-app',
+        showFavicons: showFavicons === 'true'
     } as Settings;
 };
 
@@ -38,6 +40,7 @@ const saveSettings = async (settings?: Settings): Promise<void> => {
     await Preferences.set({ key: 'initialViewMode', value: settings.initialViewMode?.toString() || '' });
     await Preferences.set({ key: 'listItemMode', value: settings.listItemMode?.toString() || '' });
     await Preferences.set({ key: 'browserMode', value: settings.browserMode?.toString() || '' });
+    await Preferences.set({ key: 'showFavicons', value: settings.showFavicons ? 'true' : 'false' });
 };
 
 export {

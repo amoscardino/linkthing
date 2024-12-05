@@ -12,4 +12,6 @@ export default interface Bookmark {
     tag_names?: string[];
     date_added: string;
     date_modified: string | null;
+    favicon_url: string | null;
+    preview_url: string | null;
 }
