@@ -13,11 +13,11 @@ import {
   IonSelectOption,
   IonToggle
 } from "@ionic/react";
-import { checkmarkOutline, closeOutline, helpCircleOutline } from "ionicons/icons";
+import { addOutline, checkmarkOutline, closeOutline, helpCircleOutline, trashOutline } from "ionicons/icons";
 import StandardPage from "components/StandardPage";
 import { tapMedium } from "utils/haptics";
 import useSettings from "hooks/useSettings";
-import { Settings } from "api/types/settings";
+import { CustomHeader, Settings } from "api/types/settings";
 import Footer from "components/Footer";
 
 interface SettingsPageProps {
@@ -70,6 +70,37 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
     setSettings(prev => ({ ...prev, showFavicons: evt.detail.checked } as Settings));
   };
 
+  const handleAddHeader = () => {
+    const newHeader: CustomHeader = { name: '', value: '' };
+    setSettings(prev => ({ 
+      ...prev, 
+      customHeaders: [...(prev?.customHeaders || []), newHeader] 
+    } as Settings));
+  };
+
+  const handleRemoveHeader = (index: number) => {
+    setSettings(prev => ({ 
+      ...prev, 
+      customHeaders: (prev?.customHeaders || []).filter((_, i) => i !== index) 
+    } as Settings));
+  };
+
+  const handleHeaderNameChange = (index: number, value: string) => {
+    setSettings(prev => {
+      const headers = [...(prev?.customHeaders || [])];
+      headers[index] = { ...headers[index], name: value };
+      return { ...prev, customHeaders: headers } as Settings;
+    });
+  };
+
+  const handleHeaderValueChange = (index: number, value: string) => {
+    setSettings(prev => {
+      const headers = [...(prev?.customHeaders || [])];
+      headers[index] = { ...headers[index], value: value };
+      return { ...prev, customHeaders: headers } as Settings;
+    });
+  };
+
   const closeButton = (
     <IonButton onClick={handleCloseButton} title="Cancel">
       <IonIcon slot="icon-only" icon={closeOutline} />
@@ -119,6 +150,58 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
             onIonInput={handleTokenChange}
             helperText="Your REST API token from Settings > Integrations."
           />
+        </IonItem>
+
+        <IonListHeader className="ion-margin-top ion-padding-top">
+          Custom Request Headers
+        </IonListHeader>
+
+        {(settings?.customHeaders || []).map((header, index) => (
+          <div key={index}>
+            <IonItem lines="none">
+              <IonInput
+                label="Header Name"
+                labelPlacement="stacked"
+                value={header.name}
+                autocapitalize="off"
+                autocorrect="off"
+                autocomplete="off"
+                onIonInput={(e) => handleHeaderNameChange(index, e.detail.value || '')}
+                placeholder="e.g., X-Custom-Header"
+              />
+            </IonItem>
+            <IonItem lines="none" className="ion-margin-bottom">
+              <IonInput
+                label="Header Value"
+                labelPlacement="stacked"
+                value={header.value}
+                autocapitalize="off"
+                autocorrect="off"
+                autocomplete="off"
+                onIonInput={(e) => handleHeaderValueChange(index, e.detail.value || '')}
+                placeholder="e.g., custom-value"
+              />
+              <IonButton 
+                slot="end" 
+                fill="clear" 
+                onClick={() => handleRemoveHeader(index)}
+                title="Remove Header"
+              >
+                <IonIcon icon={trashOutline} />
+              </IonButton>
+            </IonItem>
+          </div>
+        ))}
+
+        <IonItem lines="none" className="ion-margin-bottom">
+          <IonButton 
+            expand="block" 
+            fill="outline" 
+            onClick={handleAddHeader}
+          >
+            <IonIcon slot="start" icon={addOutline} />
+            Add Custom Header
+          </IonButton>
         </IonItem>
 
         <IonListHeader className="ion-margin-top ion-padding-top">
