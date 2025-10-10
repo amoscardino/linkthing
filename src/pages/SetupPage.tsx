@@ -9,15 +9,16 @@ import {
     IonImg,
     IonInput,
     IonItem,
-    IonList
+    IonList,
+    IonListHeader
 } from "@ionic/react";
 import StandardPage from "components/StandardPage";
 import { tapMedium } from "utils/haptics";
 import useSettings from "hooks/useSettings";
-import { Settings } from "api/types/settings";
+import { CustomHeader, Settings } from "api/types/settings";
 import logoHeader from 'assets/logoHeader.png';
 import StandardColumn from "components/StandardColumn";
-import { checkmark } from "ionicons/icons";
+import { addOutline, checkmark, trashOutline } from "ionicons/icons";
 import Footer from "components/Footer";
 
 const SetupPage = () => {
@@ -41,6 +42,37 @@ const SetupPage = () => {
 
     const handleTokenChange = (evt: CustomEvent<InputChangeEventDetail>) => {
         setSettings(prev => ({ ...prev, token: evt.detail.value || '' } as Settings));
+    };
+
+    const handleAddHeader = () => {
+        const newHeader: CustomHeader = { name: '', value: '' };
+        setSettings(prev => ({ 
+            ...prev, 
+            customHeaders: [...(prev?.customHeaders || []), newHeader] 
+        } as Settings));
+    };
+
+    const handleRemoveHeader = (index: number) => {
+        setSettings(prev => ({ 
+            ...prev, 
+            customHeaders: (prev?.customHeaders || []).filter((_, i) => i !== index) 
+        } as Settings));
+    };
+
+    const handleHeaderNameChange = (index: number, value: string) => {
+        setSettings(prev => {
+            const headers = [...(prev?.customHeaders || [])];
+            headers[index] = { ...headers[index], name: value };
+            return { ...prev, customHeaders: headers } as Settings;
+        });
+    };
+
+    const handleHeaderValueChange = (index: number, value: string) => {
+        setSettings(prev => {
+            const headers = [...(prev?.customHeaders || [])];
+            headers[index] = { ...headers[index], value: value };
+            return { ...prev, customHeaders: headers } as Settings;
+        });
     };
 
     return (
@@ -85,6 +117,58 @@ const SetupPage = () => {
                                 onIonInput={handleTokenChange}
                                 helperText="Your REST API token from Settings > Integrations."
                             />
+                        </IonItem>
+
+                        <IonListHeader className="ion-margin-top">
+                            Custom Request Headers (Optional)
+                        </IonListHeader>
+
+                        {(settings?.customHeaders || []).map((header, index) => (
+                            <div key={index}>
+                                <IonItem lines="none">
+                                    <IonInput
+                                        label="Header Name"
+                                        labelPlacement="stacked"
+                                        value={header.name}
+                                        autocapitalize="off"
+                                        autocorrect="off"
+                                        autocomplete="off"
+                                        onIonInput={(e) => handleHeaderNameChange(index, e.detail.value || '')}
+                                        placeholder="e.g., X-Custom-Header"
+                                    />
+                                </IonItem>
+                                <IonItem lines="none" className="ion-padding-bottom">
+                                    <IonInput
+                                        label="Header Value"
+                                        labelPlacement="stacked"
+                                        value={header.value}
+                                        autocapitalize="off"
+                                        autocorrect="off"
+                                        autocomplete="off"
+                                        onIonInput={(e) => handleHeaderValueChange(index, e.detail.value || '')}
+                                        placeholder="e.g., custom-value"
+                                    />
+                                    <IonButton 
+                                        slot="end" 
+                                        fill="clear" 
+                                        onClick={() => handleRemoveHeader(index)}
+                                        title="Remove Header"
+                                    >
+                                        <IonIcon icon={trashOutline} />
+                                    </IonButton>
+                                </IonItem>
+                            </div>
+                        ))}
+
+                        <IonItem lines="none" className="ion-padding-bottom">
+                            <IonButton 
+                                expand="block" 
+                                fill="outline" 
+                                onClick={handleAddHeader}
+                            >
+                                <IonIcon slot="start" icon={addOutline} />
+                                Add Custom Header
+                            </IonButton>
                         </IonItem>
                     </IonList>
 
