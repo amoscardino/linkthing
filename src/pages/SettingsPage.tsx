@@ -71,32 +71,42 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
   };
 
   const handleAddHeader = () => {
-    const newHeader: CustomHeader = { name: '', value: '' };
-    setSettings(prev => ({ 
-      ...prev, 
-      customHeaders: [...(prev?.customHeaders || []), newHeader] 
+    const newHeader: CustomHeader = {
+      id: crypto.randomUUID(),
+      name: '',
+      value: ''
+    };
+    setSettings(prev => ({
+      ...prev,
+      customHeaders: [...(prev?.customHeaders || []), newHeader]
     } as Settings));
   };
 
-  const handleRemoveHeader = (index: number) => {
-    setSettings(prev => ({ 
-      ...prev, 
-      customHeaders: (prev?.customHeaders || []).filter((_, i) => i !== index) 
+  const handleRemoveHeader = (id: string) => {
+    setSettings(prev => ({
+      ...prev,
+      customHeaders: (prev?.customHeaders || []).filter(header => header.id !== id)
     } as Settings));
   };
 
-  const handleHeaderNameChange = (index: number, value: string) => {
+  const handleHeaderNameChange = (id: string, name: string) => {
     setSettings(prev => {
       const headers = [...(prev?.customHeaders || [])];
-      headers[index] = { ...headers[index], name: value };
+      const header = headers.find(h => h.id === id);
+      if (header) {
+        header.name = name;
+      }
       return { ...prev, customHeaders: headers } as Settings;
     });
   };
 
-  const handleHeaderValueChange = (index: number, value: string) => {
+  const handleHeaderValueChange = (id: string, value: string) => {
     setSettings(prev => {
       const headers = [...(prev?.customHeaders || [])];
-      headers[index] = { ...headers[index], value: value };
+      const header = headers.find(h => h.id === id);
+      if (header) {
+        header.value = value;
+      }
       return { ...prev, customHeaders: headers } as Settings;
     });
   };
@@ -152,12 +162,12 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
           />
         </IonItem>
 
-        <IonListHeader className="ion-margin-top ion-padding-top">
-          Custom Request Headers
+        <IonListHeader>
+          Custom Request Headers (optional)
         </IonListHeader>
 
-        {(settings?.customHeaders || []).map((header, index) => (
-          <div key={index}>
+        {(settings?.customHeaders || []).map(header => (
+          <div key={header.id}>
             <IonItem lines="none">
               <IonInput
                 label="Header Name"
@@ -166,11 +176,11 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                 autocapitalize="off"
                 autocorrect="off"
                 autocomplete="off"
-                onIonInput={(e) => handleHeaderNameChange(index, e.detail.value || '')}
-                placeholder="e.g., X-Custom-Header"
+                onIonInput={(e) => handleHeaderNameChange(header.id, e.detail.value || '')}
+                helperText="e.g., X-Custom-Header"
               />
             </IonItem>
-            <IonItem lines="none" className="ion-margin-bottom">
+            <IonItem lines="none" className="ion-padding-bottom">
               <IonInput
                 label="Header Value"
                 labelPlacement="stacked"
@@ -178,13 +188,13 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
                 autocapitalize="off"
                 autocorrect="off"
                 autocomplete="off"
-                onIonInput={(e) => handleHeaderValueChange(index, e.detail.value || '')}
-                placeholder="e.g., custom-value"
+                onIonInput={(e) => handleHeaderValueChange(header.id, e.detail.value || '')}
+                helperText="e.g., custom-value"
               />
-              <IonButton 
-                slot="end" 
-                fill="clear" 
-                onClick={() => handleRemoveHeader(index)}
+              <IonButton
+                slot="end"
+                fill="clear"
+                onClick={() => handleRemoveHeader(header.id)}
                 title="Remove Header"
               >
                 <IonIcon icon={trashOutline} />
@@ -193,15 +203,16 @@ const SettingsPage = ({ dismiss }: SettingsPageProps) => {
           </div>
         ))}
 
-        <IonItem lines="none" className="ion-margin-bottom">
-          <IonButton 
-            expand="block" 
-            fill="outline" 
-            onClick={handleAddHeader}
-          >
-            <IonIcon slot="start" icon={addOutline} />
-            Add Custom Header
-          </IonButton>
+        <IonItem lines="none">
+          <div className="ion-text-end ion-flex-grow-1">
+            <IonButton
+              fill="outline"
+              onClick={handleAddHeader}
+            >
+              <IonIcon slot="start" icon={addOutline} />
+              Add Custom Header
+            </IonButton>
+          </div>
         </IonItem>
 
         <IonListHeader className="ion-margin-top ion-padding-top">

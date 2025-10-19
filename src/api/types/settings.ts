@@ -3,17 +3,18 @@ import { ItemMode } from "types/itemMode";
 import { ViewMode } from "types/viewMode";
 
 export interface CustomHeader {
-    name: string;
-    value: string;
+  id: string;
+  name: string;
+  value: string;
 }
 
 export interface Settings {
-    instanceUrl?: string;
-    token?: string;
-    disableClipboard?: boolean;
-    initialViewMode?: ViewMode;
-    listItemMode?: ItemMode;
-    browserMode?: BrowserMode;
-    showFavicons?: boolean;
-    customHeaders?: CustomHeader[];
+  instanceUrl?: string;
+  token?: string;
+  disableClipboard?: boolean;
+  initialViewMode?: ViewMode;
+  listItemMode?: ItemMode;
+  browserMode?: BrowserMode;
+  showFavicons?: boolean;
+  customHeaders?: CustomHeader[];
 }
